@@ -4,11 +4,13 @@
     <UserSecretsId>dotnet-DockerBackup-e68ba578-a6ed-4782-9c62-ba23c2a60c8a</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
+    <DockerfileRunArguments>-v /var/run/docker.sock:/var/run/docker.sock</DockerfileRunArguments>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Docker.DotNet" Version="3.125.15" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
   </ItemGroup>
 
 </Project>
