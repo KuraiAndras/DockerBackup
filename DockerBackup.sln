@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -8,6 +8,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerBackup.WebClient", "src\DockerBackup.WebClient\DockerBackup.WebClient.csproj", "{CF9E9851-DCD5-4D9C-BD25-D725609A7FB8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerBackup.WebApi", "src\DockerBackup.WebApi\DockerBackup.WebApi.csproj", "{ECBCC8C8-29FA-40C2-8302-41AF48ECA2F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "build", "build\build.csproj", "{6FD45732-E7F5-4FD4-93EC-83CF149B3F94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
