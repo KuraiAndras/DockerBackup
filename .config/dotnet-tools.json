@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "dotnet-outdated-tool": {
+      "version": "4.6.4",
+      "commands": [
+        "dotnet-outdated"
+      ],
+      "rollForward": false
+    },
+    "dotnet-tools-outdated": {
+      "version": "0.7.1",
+      "commands": [
+        "dotnet-tools-outdated"
+      ],
+      "rollForward": false
+    },
+    "nswag.consolecore": {
+      "version": "14.1.0",
+      "commands": [
+        "nswag"
+      ],
+      "rollForward": false
+    },
+    "dotnet-ef": {
+      "version": "8.0.10",
+      "commands": [
+        "dotnet-ef"
+      ],
+      "rollForward": false
+    }
+  }
+}
