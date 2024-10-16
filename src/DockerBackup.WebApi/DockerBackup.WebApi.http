@@ -1,6 +1,0 @@
-@DockerBackup.WebApi_HostAddress = http://localhost:5264
-
-GET {{DockerBackup.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
