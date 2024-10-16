@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{189BFB54-7B3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerBackup.WebClient", "src\DockerBackup.WebClient\DockerBackup.WebClient.csproj", "{CF9E9851-DCD5-4D9C-BD25-D725609A7FB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerBackup.WebApi", "src\DockerBackup.WebApi\DockerBackup.WebApi.csproj", "{ECBCC8C8-29FA-40C2-8302-41AF48ECA2F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +22,13 @@ Global
 		{CF9E9851-DCD5-4D9C-BD25-D725609A7FB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF9E9851-DCD5-4D9C-BD25-D725609A7FB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF9E9851-DCD5-4D9C-BD25-D725609A7FB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECBCC8C8-29FA-40C2-8302-41AF48ECA2F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECBCC8C8-29FA-40C2-8302-41AF48ECA2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECBCC8C8-29FA-40C2-8302-41AF48ECA2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECBCC8C8-29FA-40C2-8302-41AF48ECA2F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CF9E9851-DCD5-4D9C-BD25-D725609A7FB8} = {189BFB54-7B37-47DC-98A2-AEB967F7D43F}
+		{ECBCC8C8-29FA-40C2-8302-41AF48ECA2F0} = {189BFB54-7B37-47DC-98A2-AEB967F7D43F}
 	EndGlobalSection
 EndGlobal
