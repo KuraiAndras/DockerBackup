@@ -14,4 +14,8 @@
     <PackageReference Include="MudBlazor" Version="7.12.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DockerBackup.ApiClient\DockerBackup.ApiClient.csproj" />
+  </ItemGroup>
+
 </Project>

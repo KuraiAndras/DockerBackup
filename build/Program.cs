@@ -20,6 +20,7 @@ internal static class Program
     /// <param name="skipDependencies">Do not run targets' dependencies.</param>
     /// <param name="verbose">Enable verbose output.</param>
     /// <param name="configuration">.NET confiuration</param>
+    /// <param name="verbosity">.NET verbosity</param>
     private static async Task Main(
         string[] targets,
         bool clear,
@@ -34,7 +35,8 @@ internal static class Program
         bool parallel,
         bool skipDependencies,
         bool verbose,
-        string configuration = "Debug")
+        string configuration = "Debug",
+        string verbosity = "quiet")
     {
         var options = new Options
         {
@@ -52,8 +54,16 @@ internal static class Program
             Verbose = verbose,
         };
 
-        Target("build", () => RunAsync("dotnet", $"build --configuration {configuration} --nologo --verbosity quiet"));
-        Target("test", DependsOn("build"), () => RunAsync("dotnet", "test --configuration Release --no-build --nologo --verbosity quiet"));
+        Target("restore-tools", () => RunAsync("dotnet", "tool restore"));
+
+        Target("restore", () => RunAsync("dotnet", $"restore --verbosity {verbosity}"));
+
+        Target("build", DependsOn("restore"), () => RunAsync("dotnet", $"build --configuration {configuration} --no-restore --nologo --verbosity {verbosity}"));
+
+        Target("test", DependsOn("build"), () => RunAsync("dotnet", $"test --configuration {configuration} --no-build --nologo --verbosity {verbosity}"));
+
+        Target("generate-httpclient", DependsOn("build", "restore-tools"), () => RunAsync("dotnet", $"nswag run {Path.Combine("src", "DockerBackup.ApiClient", "DockerBackup.nswag.json")} /variables:Configuration={configuration}"));
+
         Target("default", DependsOn("test"));
 
         await RunTargetsWithoutExitingAsync(targets, options, messageOnly: ex => ex is SimpleExec.ExitCodeException);
