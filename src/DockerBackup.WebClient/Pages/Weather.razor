@@ -1,6 +1,6 @@
 ﻿@page "/weather"
 
-@inject IApiClient Client
+@inject IClient Client
 
 <PageTitle>Weather</PageTitle>
 
@@ -17,7 +17,7 @@ else
         <HeaderContent>
             <MudTh>
                 <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                SortBy="new Func<WeatherForecast, object>(x=>x.Date)">Date</MudTableSortLabel>
+                    SortBy="new Func<WeatherForecast, object>(x=>x.Date)">Date</MudTableSortLabel>
             </MudTh>
             <MudTh>
                 <MudTableSortLabel SortBy="new Func<WeatherForecast, object>(x=>x.TemperatureC)">Temp. (C)
@@ -46,5 +46,5 @@ else
 @code {
     private List<WeatherForecast>? _forecasts;
 
-    protected override async Task OnInitializedAsync() => _forecasts = await Client.WeatherforecastAsync();
+    protected override async Task OnInitializedAsync() => _forecasts = await Client.GetWeatherForecastAsync();
 }

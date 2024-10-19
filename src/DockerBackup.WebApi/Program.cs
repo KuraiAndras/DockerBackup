@@ -1,4 +1,4 @@
-using DockerBackup.ApiClient.Models;
+using DockerBackup.WebApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument();
+builder.Services.AddControllers();
+
+builder.Services.AddSingleton(TimeProvider.System);
+
+builder.Services.AddScoped<IController, ControllerImplementation>();
 
 var app = builder.Build();
 
@@ -24,23 +29,6 @@ app.MapFallbackToFile("index.html");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("api/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithOpenApi();
+app.MapControllers();
 
 app.Run();

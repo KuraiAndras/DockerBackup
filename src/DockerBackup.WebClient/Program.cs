@@ -10,9 +10,9 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddScoped<IApiClient, ApiClient>(sp =>
+builder.Services.AddScoped<IClient, Client>(sp =>
 {
-    var client = new ApiClient(sp.GetRequiredService<HttpClient>());
+    var client = new Client(sp.GetRequiredService<HttpClient>());
     
     client.JsonSerializerSettings.WriteIndented = false;
     client.JsonSerializerSettings.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
