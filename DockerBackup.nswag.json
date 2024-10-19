@@ -91,7 +91,7 @@
       "generateDtoTypes": true,
       "generateOptionalPropertiesAsNullable": true,
       "generateNullableReferenceTypes": true,
-      "templateDirectory": null,
+      "templateDirectory": "src/DockerBackup.ApiClient/Templates",
       "serviceHost": null,
       "serviceSchemes": null,
       "output": "src/DockerBackup.ApiClient/HttpClients.cs",
