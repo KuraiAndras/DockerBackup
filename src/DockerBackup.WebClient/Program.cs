@@ -4,6 +4,7 @@ using DockerBackup.WebClient;
 using MudBlazor.Services;
 using DockerBackup.ApiClient;
 using System.Text.Json;
+using DockerBackup.WebClient.Interop;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -22,5 +23,7 @@ builder.Services.AddScoped<IClient, Client>(sp =>
 });
 
 builder.Services.AddMudServices();
+
+builder.Services.AddScoped<IClipboardService, ClipboardService>();
 
 await builder.Build().RunAsync();
