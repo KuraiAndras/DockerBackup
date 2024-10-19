@@ -1,0 +1,13 @@
+services:
+  service1:
+    image: nginx:latest
+    volumes:
+      - ./service1:/storage1
+  service2:
+    image: nginx:latest
+    volumes:
+      - ./service2:/storage2
+  service3:
+    image: nginx:latest
+    volumes:
+      - ./service3:/storage3
