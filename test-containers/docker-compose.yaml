@@ -2,12 +2,28 @@ services:
   service1:
     image: nginx:latest
     volumes:
-      - ./service1:/storage1
+      - ./service1-1:/storage1
+
   service2:
     image: nginx:latest
     volumes:
-      - ./service2:/storage2
+      - ./service2-1:/storage1
+      - ./service2-2:/storage2
+
   service3:
     image: nginx:latest
     volumes:
-      - ./service3:/storage3
+      - ./service3-1:/storage1
+      - ./service3-2:/storage2
+      - ./service3-3:/storage3
+
+  service4:
+    image: nginx:latest
+
+  service5:
+    image: hello-world:latest
+
+  service6:
+    image: hello-world:latest
+    volumes:
+      - ./service6-1:/storage1
