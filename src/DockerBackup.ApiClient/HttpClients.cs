@@ -268,14 +268,14 @@ namespace DockerBackup.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("date")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset Date { get; set; } = default!;
+        public required System.DateTimeOffset Date { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("temperatureC")]
-        public int TemperatureC { get; set; } = default!;
+        public required int TemperatureC { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("summary")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Summary { get; set; } = default!;
+        public required string Summary { get; set; } = default!;
 
     }
 
