@@ -40,6 +40,18 @@ namespace DockerBackup.WebApi.Controllers
 
         System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.ICollection<WeatherForecast>>> GetWeatherForecastAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
+        /// <summary>
+        /// Get containers
+        /// </summary>
+
+        /// <remarks>
+        /// Get the list of containers
+        /// </remarks>
+
+        /// <returns>OK</returns>
+
+        System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.ICollection<Container>>> GetContainersAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -65,6 +77,28 @@ namespace DockerBackup.WebApi.Controllers
         {
 
             var result = await _implementation.GetWeatherForecastAsync(cancellationToken).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
+        }
+
+        /// <summary>
+        /// Get containers
+        /// </summary>
+        /// <remarks>
+        /// Get the list of containers
+        /// </remarks>
+        /// <returns>OK</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/containers", Name = "GetContainers")]
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetContainers(System.Threading.CancellationToken cancellationToken)
+        {
+
+            var result = await _implementation.GetContainersAsync(cancellationToken).ConfigureAwait(false);
 
             var status = result.StatusCode;
             Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };

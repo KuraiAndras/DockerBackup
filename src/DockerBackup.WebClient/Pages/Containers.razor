@@ -1,0 +1,63 @@
+﻿@page "/containers"
+
+@inject IClient Client
+
+@if (_containers == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@RefreshContainers" />
+    <MudTable Items="@_containers" Hover="true" SortLabel="Sort By" Elevation="0" AllowUnsorted="false">
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                    SortBy="new Func<Container, object>(x=>x.Name)">
+                    Name
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                    SortBy="new Func<Container, object>(x=>x.ShortId)">
+                    ID
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh> Image </MudTh>
+            <MudTh>
+                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                    SortBy="new Func<Container, object>(x=>x.Status)">
+                    Status
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh> Directories </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="ID">
+                <MudTooltip Content="@context.Id" Arrow="true" Placement="Placement.Bottom">
+                    <MudText Typo="Typo.body2">@context.ShortId</MudText>
+                </MudTooltip>
+            </MudTd>
+            <MudTd DataLabel="Image">@context.Image</MudTd>
+            <MudTd DataLabel="Status">@context.Status</MudTd>
+            <MudTd DataLabel="Backups">
+                <MudList T="string">
+                    @foreach (var directory in context.BackupDirectories)
+                    {
+                        <MudListItem>@directory</MudListItem>
+                    }
+                </MudList>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+
+    private List<Container>? _containers;
+
+    protected override async Task OnInitializedAsync() => await RefreshContainers();
+
+    private async Task RefreshContainers() => _containers = await Client.GetContainersAsync();
+}

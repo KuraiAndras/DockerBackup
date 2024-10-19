@@ -24,3 +24,18 @@ paths:
                 type: array
                 items:
                   $ref: "./schemas/WeatherForecast.yaml"
+
+  /api/containers:
+    get:
+      summary: Get containers
+      description: Get the list of containers
+      operationId: GetContainers
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./schemas/Container.yaml"

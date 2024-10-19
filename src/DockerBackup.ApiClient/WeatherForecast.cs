@@ -1,5 +1,3 @@
-using System;
-
 namespace DockerBackup.ApiClient;
 
 public partial class WeatherForecast

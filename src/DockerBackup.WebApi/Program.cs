@@ -1,3 +1,5 @@
+using Docker.DotNet;
+
 using DockerBackup.WebApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,8 @@ builder.Services.AddOpenApiDocument();
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton(TimeProvider.System);
+
+builder.Services.AddScoped<IDockerClient>(_ => new DockerClientConfiguration().CreateClient());
 
 builder.Services.AddScoped<IController, ControllerImplementation>();
 
