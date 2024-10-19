@@ -29,18 +29,6 @@ namespace DockerBackup.WebApi.Controllers
     {
 
         /// <summary>
-        /// Get weather forecast
-        /// </summary>
-
-        /// <remarks>
-        /// Get the weather forecast for the next 5 days
-        /// </remarks>
-
-        /// <returns>OK</returns>
-
-        System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.ICollection<WeatherForecast>>> GetWeatherForecastAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-
-        /// <summary>
         /// Get containers
         /// </summary>
 
@@ -63,28 +51,6 @@ namespace DockerBackup.WebApi.Controllers
         public Controller(IController implementation)
         {
             _implementation = implementation;
-        }
-
-        /// <summary>
-        /// Get weather forecast
-        /// </summary>
-        /// <remarks>
-        /// Get the weather forecast for the next 5 days
-        /// </remarks>
-        /// <returns>OK</returns>
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/weatherforecast", Name = "GetWeatherForecast")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetWeatherForecast(System.Threading.CancellationToken cancellationToken)
-        {
-
-            var result = await _implementation.GetWeatherForecastAsync(cancellationToken).ConfigureAwait(false);
-
-            var status = result.StatusCode;
-            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
-
-            foreach (var header in result.Headers)
-                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
-
-            return response;
         }
 
         /// <summary>

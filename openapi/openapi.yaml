@@ -10,20 +10,6 @@ info:
 security: []
 
 paths:
-  /api/weatherforecast:
-    get:
-      summary: Get weather forecast
-      description: Get the weather forecast for the next 5 days
-      operationId: GetWeatherForecast
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "./schemas/WeatherForecast.yaml"
 
   /api/containers:
     get:
