@@ -107,7 +107,7 @@
       "routeNamingStrategy": "OperationId",
       "basePath": null,
       "className": "{controller}",
-      "operationGenerationMode": "MultipleClientsFromOperationId",
+      "operationGenerationMode": "MultipleClientsFromFirstTagAndOperationId",
       "additionalNamespaceUsages": [
         "DockerBackup.ApiClient"
       ],
