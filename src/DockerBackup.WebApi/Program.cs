@@ -1,6 +1,9 @@
 using Docker.DotNet;
 
 using DockerBackup.WebApi.Controllers;
+using DockerBackup.WebApi.Options;
+
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,8 @@ builder.Services.AddScoped<IDockerClient>(_ => new DockerClientConfiguration().C
 
 builder.Services.AddScoped<IController, ControllerImplementation>();
 
+builder.Services.Configure<BackupOptions>(builder.Configuration.GetSection(BackupOptions.Section));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +30,10 @@ if (app.Environment.IsDevelopment())
 
     app.UseOpenApi();
     app.UseSwaggerUi();
+
+    var backupOptions = app.Services.GetRequiredService<IOptions<BackupOptions>>().Value;
+
+    backupOptions.BackupPath = Path.Combine(Directory.GetCurrentDirectory(), "backups");
 }
 
 app.UseBlazorFrameworkFiles();
