@@ -10,7 +10,7 @@ public sealed class BackupOptions
     public string BackupPath { get; set; } = "/backups";
 
     /// <summary>
-    /// The default time in milliseconds to wait for a container to stop before killing it.
+    /// The default time in milliseconds to wait for a container to stop before stopping it.
     /// </summary>
     public uint DefaultWaitForContainerStopMs { get; set; } = 5000;
 }

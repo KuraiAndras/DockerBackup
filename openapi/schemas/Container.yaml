@@ -7,6 +7,7 @@ required:
   - names
   - image
   - status
+  - state
   - backupDirectories
 
 properties:
@@ -23,6 +24,10 @@ properties:
   status:
     type: string
     description: The status of the container
+
+  state:
+    type: string
+    description: The state of the container
 
   image:
     type: string

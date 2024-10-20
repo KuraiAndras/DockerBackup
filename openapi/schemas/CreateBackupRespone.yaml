@@ -1,0 +1,8 @@
+type: object
+additionalProperties: false
+required:
+  - backupId
+properties:
+  backupId:
+    type: string
+    description: The id of the backup

@@ -1,0 +1,17 @@
+<MudList T="string" SelectionMode="SelectionMode.MultiSelection" SelectedValuesChanged="OnSelectionChanged">
+    @foreach (var directory in Container.BackupDirectories)
+    {
+        <MudListItem Text="@directory" />
+    }
+</MudList>
+
+
+@code {
+    public record SelectionChangedParams(Container Container, IReadOnlyCollection<string> SelectedBackups);
+
+    [Parameter, EditorRequired] public required Container Container { get; set; }
+
+    [Parameter, EditorRequired] public required EventCallback<SelectionChangedParams> SelectionChanged { get; set; }
+
+    private async Task OnSelectionChanged(IReadOnlyCollection<string> values) => await SelectionChanged.InvokeAsync(new(Container, values));
+}
