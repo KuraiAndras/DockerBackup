@@ -465,7 +465,7 @@ namespace DockerBackup.ApiClient
 
         [System.Text.Json.Serialization.JsonPropertyName("backupId")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public required string BackupId { get; set; } = default!;
+        public required System.Guid BackupId { get; set; } = default!;
 
     }
 

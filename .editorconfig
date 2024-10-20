@@ -364,3 +364,6 @@ dotnet_naming_style.s_camelcase.capitalization = camel_case
 
 # IDE0160: Convert to block scoped namespace
 csharp_style_namespace_declarations = file_scoped:warning
+
+[**/Migrations/*.cs]
+generated_code = true

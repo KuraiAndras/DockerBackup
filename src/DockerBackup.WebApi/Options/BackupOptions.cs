@@ -13,4 +13,14 @@ public sealed class BackupOptions
     /// The default time in milliseconds to wait for a container to stop before stopping it.
     /// </summary>
     public uint DefaultWaitForContainerStopMs { get; set; } = 5000;
+
+    /// <summary>
+    /// The file name of the SQLite database.
+    /// </summary>
+    public string DatabaseFileName { get; set; } = "DockerBackup.db";
+
+    /// <summary>
+    /// The full path where all persistent data is stored except for backups.
+    /// </summary>
+    public string ConfigDirectoryPath { get; set; } = "/config";
 }

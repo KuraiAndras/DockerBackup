@@ -2,6 +2,7 @@ using Docker.DotNet;
 using Docker.DotNet.Models;
 
 using DockerBackup.ApiClient;
+using DockerBackup.WebApi.Database;
 using DockerBackup.WebApi.Extensions;
 using DockerBackup.WebApi.Options;
 
@@ -14,7 +15,8 @@ public sealed class ControllerImplementation
     IDockerClient _docker,
     ILogger<ControllerImplementation> _logger,
     TimeProvider _timeProvider,
-    IOptions<BackupOptions> _backupOptions
+    IOptions<BackupOptions> _backupOptions,
+    ApplicationDb _db
 )
     : IController
 {
@@ -24,6 +26,8 @@ public sealed class ControllerImplementation
         ContainerListResponse? container = null;
         try
         {
+            var now = _timeProvider.GetLocalNow();
+
             var containers = await _docker.Containers.ListContainersAsync(new()
             {
                 All = true,
@@ -51,7 +55,7 @@ public sealed class ControllerImplementation
                 .Select(m => m.Destination)
                 .ToArray();
 
-            var backupDirectory = Path.Combine(_backupOptions.Value.BackupPath, body.ContainerName.TrimStart('/'), $"{_timeProvider.GetLocalNow():yyyy-MM-ddTHH-mm-ss}");
+            var backupDirectory = Path.Combine(_backupOptions.Value.BackupPath, body.ContainerName.TrimStart('/'), $"{now:yyyy-MM-ddTHH-mm-ss}");
 
             if (!Directory.Exists(backupDirectory))
             {
@@ -82,11 +86,23 @@ public sealed class ControllerImplementation
                 await archive.Stream.CopyToAsync(folderTarBall, cancellationToken);
             }
 
-            // TODO: store id of backup in database
-            // TODO: return id in response
+            var containerBackup = new ContainerBackup
+            {
+                ContainerName = body.ContainerName,
+                CreatedAt = now,
+                Files = containerPathsToBackUp.Select((containerPathToBackUp, i) => new FileBackup
+                {
+                    FilePath = backupFilePaths[i],
+                    ContainerPath = containerPathToBackUp,
+                }).ToList(),
+            };
+            _db.ContainerBackups.Add(containerBackup);
+
+            await _db.SaveChangesAsync(cancellationToken);
+
             return new CreateBackupRespone
             {
-                BackupId = Guid.NewGuid().ToString(),
+                BackupId = containerBackup.Id,
             };
         }
         catch (Exception e)
