@@ -17,6 +17,7 @@ using {{ usage }};
 namespace {{ Namespace }}
 {
     using System = global::System;
+    #nullable enable
 
     {{ Clients | tab }}
 
@@ -127,18 +128,40 @@ namespace {{ Namespace }}
             StatusCode = statusCode;
             Headers = headers;
         }
+
+        public static readonly IReadOnlyDictionary<string, IEnumerable<string>> EmptyHeaders = new Dictionary<string, IEnumerable<string>>();
+
+        public static implicit operator {{ responseClassName }}(int statusCode) => new(statusCode, EmptyHeaders);
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "{{ ToolchainVersion }}")]
-    public partial class {{ responseClassName }}<TResult> : {{ responseClassName }}
+    public partial class {{ responseClassName }}<TResult> : {{ responseClassName }} where TResult : class
     {
-        public TResult Result { get; private set; }
+        public TResult? Result { get; private set; }
+
+        public ProblemDetails? ProblemDetails { get; private set; }
+
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(ProblemDetails))]
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(false, nameof(Result))]
+        public bool HasProblemDetails => ProblemDetails != null;
+
+        public {{ responseClassName }}(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, ProblemDetails problemDetails)
+            : base(statusCode, headers)
+        {
+            Result = null;
+            ProblemDetails = problemDetails;
+        }
 
         public {{ responseClassName }}(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result)
             : base(statusCode, headers)
         {
             Result = result;
+            ProblemDetails = null;
         }
+
+        public static implicit operator {{ responseClassName }}<TResult>(ProblemDetails problemDetails) => new(problemDetails.Status, EmptyHeaders, problemDetails);
+
+        public static implicit operator {{ responseClassName }}<TResult>(TResult result) => new(StatusCodes.Status200OK, EmptyHeaders, result);
     }
 
 {%-        endfor %}

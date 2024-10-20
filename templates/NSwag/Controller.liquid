@@ -79,7 +79,7 @@ public partial class {{ Class }}Controller : {% if HasBaseClass %}{{ BaseClass }
         var result = await _implementation.{{ operation.ActualOperationName }}Async({% for parameter in operation.Parameters %}{{ parameter.VariableName }}{% if parameter.HasDefault %} ?? {{parameter.Default}}{% endif %}{% if parameter.IsLast == false or UseCancellationToken %}, {% endif %}{% endfor %}{% if UseCancellationToken %}cancellationToken{% endif %}).ConfigureAwait(false);
 
         var status = result.StatusCode;
-        Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result{% if operation.UnwrappedResultType != "void" %}.Result{% endif %}) { StatusCode = status };
+        Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult({% if operation.UnwrappedResultType != "void" %}result.HasProblemDetails ? result.ProblemDetails : result.Result{% endif %}{% if operation.UnwrappedResultType == "void" %}result{% endif %}) { StatusCode = status };
 
         foreach (var header in result.Headers)
             Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));

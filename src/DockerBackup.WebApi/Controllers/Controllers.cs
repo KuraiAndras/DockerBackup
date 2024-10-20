@@ -23,6 +23,7 @@ using DockerBackup.ApiClient;
 namespace DockerBackup.WebApi.Controllers
 {
     using System = global::System;
+    #nullable enable
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public interface IController
@@ -67,7 +68,7 @@ namespace DockerBackup.WebApi.Controllers
             var result = await _implementation.GetContainersAsync(cancellationToken).ConfigureAwait(false);
 
             var status = result.StatusCode;
-            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.HasProblemDetails ? result.ProblemDetails : result.Result) { StatusCode = status };
 
             foreach (var header in result.Headers)
                 Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
@@ -92,18 +93,40 @@ namespace DockerBackup.WebApi.Controllers
             StatusCode = statusCode;
             Headers = headers;
         }
+
+        public static readonly IReadOnlyDictionary<string, IEnumerable<string>> EmptyHeaders = new Dictionary<string, IEnumerable<string>>();
+
+        public static implicit operator SwaggerResponse(int statusCode) => new(statusCode, EmptyHeaders);
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SwaggerResponse<TResult> : SwaggerResponse
+    public partial class SwaggerResponse<TResult> : SwaggerResponse where TResult : class
     {
-        public TResult Result { get; private set; }
+        public TResult? Result { get; private set; }
+
+        public ProblemDetails? ProblemDetails { get; private set; }
+
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(ProblemDetails))]
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(false, nameof(Result))]
+        public bool HasProblemDetails => ProblemDetails != null;
+
+        public SwaggerResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, ProblemDetails problemDetails)
+            : base(statusCode, headers)
+        {
+            Result = null;
+            ProblemDetails = problemDetails;
+        }
 
         public SwaggerResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result)
             : base(statusCode, headers)
         {
             Result = result;
+            ProblemDetails = null;
         }
+
+        public static implicit operator SwaggerResponse<TResult>(ProblemDetails problemDetails) => new(problemDetails.Status, EmptyHeaders, problemDetails);
+
+        public static implicit operator SwaggerResponse<TResult>(TResult result) => new(StatusCodes.Status200OK, EmptyHeaders, result);
     }
 
 
