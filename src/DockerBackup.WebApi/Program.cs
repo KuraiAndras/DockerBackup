@@ -1,7 +1,7 @@
 using Docker.DotNet;
 
-using DockerBackup.WebApi.Controllers;
 using DockerBackup.WebApi.Database;
+using DockerBackup.WebApi.Endpoints;
 using DockerBackup.WebApi.Options;
 
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +16,6 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton(TimeProvider.System);
 
 builder.Services.AddScoped<IDockerClient>(_ => new DockerClientConfiguration().CreateClient());
-
-builder.Services.AddScoped<IController, ControllerImplementation>();
 
 builder.Services.Configure<BackupOptions>(builder.Configuration.GetSection(BackupOptions.Section));
 
@@ -64,6 +62,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.MapControllers();
+
+app.MapListContainers();
+app.MapCreateBackup();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {

@@ -19,7 +19,7 @@ public partial class Containers
 
     private async Task RefreshContainers()
     {
-        _containers = await Client.GetContainersAsync();
+        _containers = await Client.GetApiContainersAsync();
         _selectedBackups.Clear();
 
         foreach (var container in _containers)
@@ -36,13 +36,13 @@ public partial class Containers
     private async Task Save(Container container)
     {
         await Snackbar.Run(
-        async () => await Client.CreateBackupAsync(new()
-        {
-            ContainerName = container.Name,
-            Directories = _selectedBackups[container.Name] is { Count: > 0 } selectedBackups
+        async () => await Client.PostApiContainersCreateBackupAsync(new CreateBackupRequest
+        (
+            ContainerName: container.Name,
+            Directories: _selectedBackups[container.Name] is { Count: > 0 } selectedBackups
                 ? selectedBackups
                 : container.BackupDirectories,
-            WaitForContainerStopMs = null,
-        }), $"Backing up {container.Name} successful", $"Backing up {container.Name} failed");
+            WaitForContainerStopMs: null
+        )), $"Backing up {container.Name} successful", $"Backing up {container.Name} failed");
     }
 }

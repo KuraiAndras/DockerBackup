@@ -6,6 +6,8 @@
 
 #nullable enable
 
+using DockerBackup.ApiClient.Infrastructure;
+
 #pragma warning disable 108 // Disable "CS0108 '{derivedDto}.ToJson()' hides inherited member '{dtoBase}.ToJson()'. Use the new keyword if hiding was intended."
 #pragma warning disable 114 // Disable "CS0114 '{derivedDto}.RaisePropertyChanged(String)' hides inherited member 'dtoBase.RaisePropertyChanged(String)'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword."
 #pragma warning disable 472 // Disable "CS0472 The result of the expression is always 'false' since a value of type 'Int32' is never equal to 'null' of type 'Int32?'
@@ -23,33 +25,18 @@
 namespace DockerBackup.ApiClient
 {
     using System = global::System;
-    #nullable enable
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IClient
     {
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>
-        /// Get containers
-        /// </summary>
-        /// <remarks>
-        /// Get the list of containers
-        /// </remarks>
-        /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<Container>> GetContainersAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<Container>> GetApiContainersAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>
-        /// Create backup
-        /// </summary>
-        /// <remarks>
-        /// Create a backup of the container
-        /// </remarks>
-        /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CreateBackupRespone> CreateBackupAsync(CreateBackupRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<CreateBackupRespone> PostApiContainersCreateBackupAsync(CreateBackupRequest request, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -86,15 +73,8 @@ namespace DockerBackup.ApiClient
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>
-        /// Get containers
-        /// </summary>
-        /// <remarks>
-        /// Get the list of containers
-        /// </remarks>
-        /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<Container>> GetContainersAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<Container>> GetApiContainersAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -163,18 +143,11 @@ namespace DockerBackup.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>
-        /// Create backup
-        /// </summary>
-        /// <remarks>
-        /// Create a backup of the container
-        /// </remarks>
-        /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CreateBackupRespone> CreateBackupAsync(CreateBackupRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<CreateBackupRespone> PostApiContainersCreateBackupAsync(CreateBackupRequest request, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (body == null)
-                throw new System.ArgumentNullException("body");
+            if (request == null)
+                throw new System.ArgumentNullException("request");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -182,7 +155,7 @@ namespace DockerBackup.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(request, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -234,7 +207,7 @@ namespace DockerBackup.ApiClient
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new ApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         if (status_ == 500)
@@ -244,7 +217,7 @@ namespace DockerBackup.ApiClient
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new ApiException<ProblemDetails>("Internal Server Error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         {
@@ -375,149 +348,7 @@ namespace DockerBackup.ApiClient
         }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class Container
-    {
-        /// <summary>
-        /// The id of the container
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("id")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public required string Id { get; set; } = default!;
-
-        /// <summary>
-        /// The names of the container
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("names")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public required System.Collections.Generic.ICollection<string> Names { get; set; } = new System.Collections.ObjectModel.Collection<string>();
-
-        /// <summary>
-        /// The status of the container
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("status")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public required string Status { get; set; } = default!;
-
-        /// <summary>
-        /// The state of the container
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("state")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public required string State { get; set; } = default!;
-
-        /// <summary>
-        /// The image of the container
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("image")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public required string Image { get; set; } = default!;
-
-        /// <summary>
-        /// The directories to backup
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("backupDirectories")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public required System.Collections.Generic.ICollection<string> BackupDirectories { get; set; } = new System.Collections.ObjectModel.Collection<string>();
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class CreateBackupRequest
-    {
-        /// <summary>
-        /// The name of the container
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("containerName")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public required string ContainerName { get; set; } = default!;
-
-        /// <summary>
-        /// The directories to backup
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("directories")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public required System.Collections.Generic.ICollection<string> Directories { get; set; } = new System.Collections.ObjectModel.Collection<string>();
-
-        /// <summary>
-        /// The time to wait for the container to stop in milliseconds
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("waitForContainerStopMs")]
-        public required int? WaitForContainerStopMs { get; set; } = default!;
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class CreateBackupRespone
-    {
-        /// <summary>
-        /// The id of the backup
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("backupId")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public required System.Guid BackupId { get; set; } = default!;
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ProblemDetails
-    {
-        /// <summary>
-        /// A URI reference that identifies the problem type. This specification encourages that, when dereferenced, it provide human-readable documentation for the problem type (e.g., using HTML).
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("type")]
-        public required string? Type { get; set; } = default!;
-
-        /// <summary>
-        /// A short, human-readable summary of the problem type. It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("title")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public required string Title { get; set; } = default!;
-
-        /// <summary>
-        /// The HTTP status code generated by the origin server for this occurrence of the problem.
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("status")]
-        public required int Status { get; set; } = default!;
-
-        /// <summary>
-        /// A human-readable explanation specific to this occurrence of the problem.
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("detail")]
-        public required string? Detail { get; set; } = default!;
-
-        /// <summary>
-        /// A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
-        /// </summary>
-
-        [System.Text.Json.Serialization.JsonPropertyName("instance")]
-        public required string? Instance { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
+    
 
 
 

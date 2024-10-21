@@ -1,0 +1,2 @@
+T:DockerBackup.ApiClient.Infrastructure.ProblemDetails;Don't use ProblemDetails from client in the Web API. Use Microsoft.AspNetCore.Mvc.ProblemDetails
+N:DockerBackup.ApiClient.Infrastructure; Don't use the infrastructure project from the client in the API project

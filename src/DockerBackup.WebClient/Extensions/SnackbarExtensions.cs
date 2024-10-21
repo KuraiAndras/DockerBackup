@@ -1,4 +1,5 @@
 using DockerBackup.ApiClient;
+using DockerBackup.ApiClient.Infrastructure;
 
 using MudBlazor;
 
@@ -17,7 +18,7 @@ public static class SnackbarExtensions
         {
             Action handle = ex switch
             {
-                ApiException<ProblemDetails> apiException => () => snackbar.Add(apiException.Result.Title, Severity.Error),
+                ApiException<ProblemDetails> apiException => () => snackbar.Add(apiException.Result.Title ?? error, Severity.Error),
                 ApiException apiException => () => snackbar.Add(apiException.Message, Severity.Error),
                 _ => () => snackbar.Add(error, Severity.Error)
             };

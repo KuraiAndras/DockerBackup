@@ -1,9 +1,0 @@
-type: object
-additionalProperties: false
-required:
-  - backupId
-properties:
-  backupId:
-    type: string
-    format: uuid
-    description: The id of the backup

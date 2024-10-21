@@ -7,8 +7,8 @@ public interface IDbSetup
     ValueTask Setup(CancellationToken cancellationToken = default);
 }
 
-public sealed class DbSetup(ApplicationDb _db) : IDbSetup
+public sealed class DbSetup(ApplicationDb db) : IDbSetup
 {
     public async ValueTask Setup(CancellationToken cancellationToken = default) =>
-        await _db.Database.MigrateAsync(cancellationToken);
+        await db.Database.MigrateAsync(cancellationToken);
 }
