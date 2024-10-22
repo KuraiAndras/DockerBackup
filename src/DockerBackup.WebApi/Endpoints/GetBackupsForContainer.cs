@@ -13,13 +13,14 @@ public sealed class GetBackupsForContainer
 {
     public static async Task<Results
     <
-        Ok<ContainerBackupResponse>,
+        Ok<ContainerBackupResponse[]>,
         NotFound<ProblemDetails>,
         InternalServerError<ProblemDetails>
     >>
     Handle([FromRoute, BindRequired] Guid containerId, ApplicationDb db, CancellationToken cancellationToken = default)
     {
-        var container = await db.ContainerBackups
+        var containers = await db.ContainerBackups
+            .Where(b => b.Id == containerId)
             .Select(b => new ContainerBackupResponse
             (
                 b.Id,
@@ -27,14 +28,14 @@ public sealed class GetBackupsForContainer
                 b.CreatedAt,
                 b.Files.Select(f => new FileBackupResponse(f.Id, f.FilePath, f.ContainerPath)).ToArray()
             ))
-            .SingleOrDefaultAsync(b => b.Id == containerId, cancellationToken);
+            .ToArrayAsync(cancellationToken);
 
-        return container is null
+        return containers is null
             ? TypedResults.NotFound(new ProblemDetails
             {
                 Status = StatusCodes.Status404NotFound,
                 Title = $"Container {containerId} not found",
             })
-            : TypedResults.Ok(container);
+            : TypedResults.Ok(containers);
     }
 }

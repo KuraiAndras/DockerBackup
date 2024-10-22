@@ -1,0 +1,12 @@
+@page "/backups/{containerId:guid}"
+
+@if (_backups is null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
+
+    @System.Text.Json.JsonSerializer.Serialize(_backups)
+}

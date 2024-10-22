@@ -19,7 +19,7 @@ public partial class Containers
 
     private async Task RefreshContainers()
     {
-        _containers = await Client.GetApiContainersAsync();
+        _containers = await Client.GetContainersAsync();
         _selectedBackups.Clear();
 
         foreach (var container in _containers)
@@ -36,7 +36,7 @@ public partial class Containers
     private async Task Save(Container container)
     {
         await Snackbar.Run(
-        async () => await Client.PostApiContainersCreateBackupAsync(new CreateBackupRequest
+        async () => await Client.CreateBackupAsync(new CreateBackupRequest
         (
             ContainerName: container.Name,
             Directories: _selectedBackups[container.Name] is { Count: > 0 } selectedBackups

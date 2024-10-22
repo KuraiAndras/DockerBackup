@@ -8,13 +8,23 @@ public static class Endpoints
 
         var containers = api.MapGroup("containers");
 
-        containers.MapGet(ListContainers.Handle);
-        containers.MapPost("create-backup", CreateBackup.Handle);
+        containers
+            .MapGet(ListContainers.Handle)
+            .WithName("get-containers");
+
+        containers
+            .MapPost("create-backup", CreateBackup.Handle)
+            .WithName("create-backup");
 
         var backups = api.MapGroup("backups");
 
-        backups.MapGet(ListBackups.Handle);
-        backups.MapGet("{containerId}", GetBackupsForContainer.Handle);
+        backups
+            .MapGet(ListBackups.Handle)
+            .WithName("get-backups");
+
+        backups
+            .MapGet("{containerId}", GetBackupsForContainer.Handle)
+            .WithName("get-backups-for-container");
 
         return app;
     }

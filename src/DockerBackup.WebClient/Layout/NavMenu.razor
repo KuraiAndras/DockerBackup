@@ -1,5 +1,6 @@
-﻿<MudNavMenu>
+﻿@using DockerBackup.WebClient.Pages
+<MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavLink Href="containers" Match="NavLinkMatch.Prefix">Containers</MudNavLink>
-    <MudNavLink Href="backups" Match="NavLinkMatch.Prefix">Backups</MudNavLink>
+    <MudNavLink Href="@Containers.PageUri" Match="NavLinkMatch.Prefix">Containers</MudNavLink>
+    <MudNavLink Href="@Backups.PageUri" Match="NavLinkMatch.Prefix">Backups</MudNavLink>
 </MudNavMenu>

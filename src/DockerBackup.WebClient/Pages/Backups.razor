@@ -8,7 +8,8 @@ else
 {
     <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
 
-    <MudTable Items="@_backups" Hover="true" SortLabel="Sort By" Elevation="0" AllowUnsorted="false">
+    <MudTable T="ListContainerBackupResponse" Items="@_backups" Hover="true" SortLabel="Sort By" Elevation="0"
+        AllowUnsorted="false" OnRowClick="BackupClicked">
         <HeaderContent>
             <MudTh>
                 <MudTableSortLabel InitialDirection="SortDirection.Ascending"
