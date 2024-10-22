@@ -63,8 +63,7 @@ app.UseStaticFiles();
 
 app.MapControllers();
 
-app.MapListContainers();
-app.MapCreateBackup();
+app.MapDockerBackup();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {

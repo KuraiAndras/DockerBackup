@@ -14,12 +14,6 @@ using Microsoft.Extensions.Options;
 
 namespace DockerBackup.WebApi.Endpoints;
 
-public static class CreateBackupRigstrar
-{
-    public static void MapCreateBackup(this IEndpointRouteBuilder app) =>
-        app.MapPost("api/containers/create-backup", CreateBackup.Handle);
-}
-
 public sealed class CreateBackup
 {
     public static async Task<Results
