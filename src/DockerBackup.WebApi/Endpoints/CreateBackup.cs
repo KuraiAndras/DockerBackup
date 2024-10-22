@@ -31,11 +31,11 @@ public sealed class CreateBackup
     Handle
     (
         [FromBody, BindRequired] CreateBackupRequest request,
-        [FromServices] ApplicationDb db,
-        [FromServices] IOptions<BackupOptions> backupOptions,
-        [FromServices] IDockerClient docker,
-        [FromServices] TimeProvider timeProvider,
-        [FromServices] ILogger<CreateBackup> logger,
+        ApplicationDb db,
+        IOptions<BackupOptions> backupOptions,
+        IDockerClient docker,
+        TimeProvider timeProvider,
+        ILogger<CreateBackup> logger,
         CancellationToken cancellationToken = default)
     {
         var backupFilePaths = new List<string>();
