@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DockerBackup.WebApi.Database;
 
@@ -24,5 +25,22 @@ public sealed class ApplicationDb(DbContextOptions<ApplicationDb> options) : DbC
             entity.Property(e => e.ContainerPath).IsRequired();
             entity.HasOne(e => e.Backup).WithMany(e => e.Files).HasForeignKey(e => e.ContainerBackupId);
         });
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        if (!Database.IsSqlite()) return;
+
+        configurationBuilder
+            .Properties<decimal>()
+            .HaveConversion<double>();
+
+        configurationBuilder
+            .Properties<DateTimeOffset>()
+            .HaveConversion<DateTimeOffsetToStringConverter>();
+
+        configurationBuilder
+            .Properties<TimeSpan>()
+            .HaveConversion<TimeSpanToStringConverter>();
     }
 }

@@ -11,6 +11,11 @@ public static class Endpoints
         containers.MapGet(ListContainers.Handle);
         containers.MapPost("create-backup", CreateBackup.Handle);
 
+        var backups = api.MapGroup("backups");
+
+        backups.MapGet(ListBackups.Handle);
+        backups.MapGet("{containerId}", GetBackupsForContainer.Handle);
+
         return app;
     }
 
