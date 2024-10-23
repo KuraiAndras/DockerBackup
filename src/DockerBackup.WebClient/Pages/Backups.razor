@@ -1,9 +1,10 @@
 @page "/backups"
 
+@inherits LoadingComponent
+
 <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
 
-<MudTable T="ListContainerBackupResponse" Items="@_backups" Hover="true" SortLabel="Sort By" Loading="@_loading"
-    
+<MudTable T="ListContainerBackupResponse" Items="@_backups" Hover="true" SortLabel="Sort By" Loading="@Loading"
     OnRowClick="BackupClicked">
     <HeaderContent>
         <MudTh>

@@ -1,10 +1,12 @@
 @page "/backups/{containerName}"
 
+@inherits LoadingComponent
+
 <MudText Typo="@Typo.h4">@ContainerName</MudText>
 
 <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
 
-<MudTable T="ContainerBackupResponse" Items="@_backups" Loading="@_loading">
+<MudTable T="ContainerBackupResponse" Items="@_backups" Loading="@Loading">
     <ColGroup>
         <col width="60px" />
         <col width="200px" />

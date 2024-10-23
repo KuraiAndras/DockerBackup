@@ -11,19 +11,11 @@ public partial class Backup
     [Parameter] public required string ContainerName { get; init; }
 
     [Inject] public required IClient Client { get; init; }
-    [Inject] public required ISnackbar Snackbar { get; init; }
 
     private List<ContainerBackupResponse> _backups = [];
-    private bool _loading = true;
 
-    override protected async Task OnInitializedAsync() => await Refresh();
-
-    private async Task Refresh()
-    {
-        _loading = true;
+    protected override async Task RefreshInternal() =>
         _backups = await Client.GetBackupsForContainerAsync(ContainerName);
-        _loading = false;
-    }
 
     private void RestoreBackup(Guid backupId) => Snackbar.Add($"{backupId}, Not yet implemented", Severity.Error);
 }

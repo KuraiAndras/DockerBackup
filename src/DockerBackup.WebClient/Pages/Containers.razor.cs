@@ -2,26 +2,24 @@ using DockerBackup.ApiClient;
 using DockerBackup.WebClient.Components;
 using DockerBackup.WebClient.Extensions;
 
+using Microsoft.AspNetCore.Components;
+
 using MudBlazor;
 
 namespace DockerBackup.WebClient.Pages;
 
 public partial class Containers
 {
-
     private readonly Dictionary<string, List<string>> _selectedBackups = [];
 
     private List<Container> _containers = [];
-    private bool _loading = true;
+
+    [Inject] public required IClient Client { get; init; }
 
     private bool SaveAllDisabled => !_selectedBackups.SelectMany(x => x.Value).Any();
 
-    protected override async Task OnInitializedAsync() => await RefreshContainers();
-
-    private async Task RefreshContainers()
+    protected override async Task RefreshInternal()
     {
-        _loading = true;
-
         _containers = await Client.GetContainersAsync();
         _selectedBackups.Clear();
 
@@ -29,8 +27,6 @@ public partial class Containers
         {
             _selectedBackups[container.Name] = [];
         }
-
-        _loading = false;
     }
 
     private void OnBackupSelectionChanged(BackupSelectionList.SelectionChangedParams parameters) =>

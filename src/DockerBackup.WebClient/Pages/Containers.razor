@@ -1,11 +1,10 @@
 ﻿@page "/containers"
 
-@inject IClient Client
-@inject ISnackbar Snackbar
+@inherits LoadingComponent
 
-<MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@RefreshContainers" />
+<MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
 <MudIconButton Icon="@Icons.Material.Filled.Save" title="backup-all" Disabled="@SaveAllDisabled" OnClick="SaveAll" />
-<MudTable Items="@_containers" Hover="true" SortLabel="Sort By" Loading="@_loading">
+<MudTable Items="@_containers" Hover="true" SortLabel="Sort By" Loading="@Loading">
     <HeaderContent>
         <MudTh>
             <MudTableSortLabel InitialDirection="SortDirection.Ascending"
