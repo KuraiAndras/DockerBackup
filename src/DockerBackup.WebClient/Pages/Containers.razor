@@ -3,62 +3,55 @@
 @inject IClient Client
 @inject ISnackbar Snackbar
 
-@if (_containers == null)
-{
-    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
-}
-else
-{
-    <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@RefreshContainers" />
-    <MudIconButton Icon="@Icons.Material.Filled.Save" title="backup-all" Disabled="@SaveAllDisabled" OnClick="SaveAll" />
-    <MudTable Items="@_containers" Hover="true" SortLabel="Sort By" Elevation="0" AllowUnsorted="false">
-        <HeaderContent>
-            <MudTh>
-                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                    SortBy="new Func<Container, object>(x=>x.Name)">
-                    Name
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                    SortBy="new Func<Container, object>(x=>x.ShortId)">
-                    ID
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                    SortBy="new Func<Container, object>(x=>x.Image)">
-                    Image
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                    SortBy="new Func<Container, object>(x=>x.Status)">
-                    Status
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                    SortBy="new Func<Container, object>(x=>x.State)">
-                    State
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh>Directories</MudTh>
-            <MudTh></MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="ID">@context.ShortId</MudTd>
-            <MudTd DataLabel="Image">@context.Image</MudTd>
-            <MudTd DataLabel="Status">@context.Status</MudTd>
-            <MudTd DataLabel="State">@context.State</MudTd>
-            <MudTd DataLabel="Backups">
-                <BackupSelectionList Container="context" SelectionChanged="OnBackupSelectionChanged" />
-            </MudTd>
-            <MudTd DataLabel="Backup">
-                <MudIconButton title="backup" Icon="@Icons.Material.Filled.Save"
-                    Disabled="@(context.BackupDirectories.Count == 0)" OnClick="() => Save(context)" />
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
+<MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@RefreshContainers" />
+<MudIconButton Icon="@Icons.Material.Filled.Save" title="backup-all" Disabled="@SaveAllDisabled" OnClick="SaveAll" />
+<MudTable Items="@_containers" Hover="true" SortLabel="Sort By" Loading="@_loading">
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                SortBy="new Func<Container, object>(x=>x.Name)">
+                Name
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                SortBy="new Func<Container, object>(x=>x.ShortId)">
+                ID
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                SortBy="new Func<Container, object>(x=>x.Image)">
+                Image
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                SortBy="new Func<Container, object>(x=>x.Status)">
+                Status
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                SortBy="new Func<Container, object>(x=>x.State)">
+                State
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>Directories</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="ID">@context.ShortId</MudTd>
+        <MudTd DataLabel="Image">@context.Image</MudTd>
+        <MudTd DataLabel="Status">@context.Status</MudTd>
+        <MudTd DataLabel="State">@context.State</MudTd>
+        <MudTd DataLabel="Backups">
+            <BackupSelectionList Container="context" SelectionChanged="OnBackupSelectionChanged" />
+        </MudTd>
+        <MudTd DataLabel="Backup">
+            <MudIconButton title="backup" Icon="@Icons.Material.Filled.Save"
+                Disabled="@(context.BackupDirectories.Count == 0)" OnClick="() => Save(context)" />
+        </MudTd>
+    </RowTemplate>
+</MudTable>

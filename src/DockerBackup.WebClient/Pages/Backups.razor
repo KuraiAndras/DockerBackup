@@ -1,39 +1,33 @@
 @page "/backups"
 
-@if (_backups is null)
-{
-    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
-}
-else
-{
-    <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
+<MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
 
-    <MudTable T="ListContainerBackupResponse" Items="@_backups" Hover="true" SortLabel="Sort By" Elevation="0"
-        AllowUnsorted="false" OnRowClick="BackupClicked">
-        <HeaderContent>
-            <MudTh>
-                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                    SortBy="new Func<ListContainerBackupResponse, object>(x=>x.ContainerName)">
-                    Name
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                    SortBy="new Func<ListContainerBackupResponse, object?>(x=>x.LastBackupAt)">
-                    Last Backup
-                </MudTableSortLabel>
-            </MudTh>
-            <MudTh>
-                <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                    SortBy="new Func<ListContainerBackupResponse, object?>(x=>x.NumberOfBackups)">
-                    Count
-                </MudTableSortLabel>
-            </MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Name">@context.ContainerName</MudTd>
-            <MudTd DataLabel="ID">@context.LastBackupAt</MudTd>
-            <MudTd DataLabel="Image">@context.NumberOfBackups</MudTd>
-        </RowTemplate>
-    </MudTable>
-}
+<MudTable T="ListContainerBackupResponse" Items="@_backups" Hover="true" SortLabel="Sort By" Loading="@_loading"
+    
+    OnRowClick="BackupClicked">
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                SortBy="new Func<ListContainerBackupResponse, object>(x=>x.ContainerName)">
+                Name
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                SortBy="new Func<ListContainerBackupResponse, object?>(x=>x.LastBackupAt)">
+                Last Backup
+            </MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                SortBy="new Func<ListContainerBackupResponse, object?>(x=>x.NumberOfBackups)">
+                Count
+            </MudTableSortLabel>
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.ContainerName</MudTd>
+        <MudTd DataLabel="ID">@context.LastBackupAt</MudTd>
+        <MudTd DataLabel="Image">@context.NumberOfBackups</MudTd>
+    </RowTemplate>
+</MudTable>

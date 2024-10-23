@@ -2,33 +2,26 @@
 
 <MudText Typo="@Typo.h4">@ContainerName</MudText>
 
-@if (_backups is null)
-{
-    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
-}
-else
-{
-    <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
+<MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
 
-    <MudTable T="ContainerBackupResponse" Items="@_backups">
-        <ColGroup>
-            <col width="60px" />
-            <col width="200px" />
-            <col />
-        </ColGroup>
-        <RowTemplate>
-            <MudTd DataLabel="Restore">
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => RestoreBackup(context.Id))">
-                    Restore
-                </MudButton>
-            </MudTd>
-            <MudTd DataLabel="Created At">@context.CreatedAt.ToLocalTime().ToString()</MudTd>
-            <MudTd DataLabel="Items">
-                @foreach (var file in context.Files)
-                {
-                    <MudText Typo="Typo.body1">@file.ContainerPath</MudText>
-                }
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
+<MudTable T="ContainerBackupResponse" Items="@_backups" Loading="@_loading">
+    <ColGroup>
+        <col width="60px" />
+        <col width="200px" />
+        <col />
+    </ColGroup>
+    <RowTemplate>
+        <MudTd DataLabel="Restore">
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => RestoreBackup(context.Id))">
+                Restore
+            </MudButton>
+        </MudTd>
+        <MudTd DataLabel="Created At">@context.CreatedAt.ToLocalTime().ToString()</MudTd>
+        <MudTd DataLabel="Items">
+            @foreach (var file in context.Files)
+            {
+                <MudText Typo="Typo.body1">@file.ContainerPath</MudText>
+            }
+        </MudTd>
+    </RowTemplate>
+</MudTable>
