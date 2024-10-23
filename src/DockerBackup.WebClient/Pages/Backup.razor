@@ -10,19 +10,25 @@ else
 {
     <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
 
-    <MudList T="ContainerBackupResponse">
-        <MudListSubheader>
-        </MudListSubheader>
-        @foreach (var backup in _backups)
-        {
-            <MudListItem Text="@backup.CreatedAt.ToLocalTime().ToString()">
-                <NestedList>
-                    @foreach (var file in backup.Files)
-                    {
-                        <MudListItem Text="@file.ContainerPath" />
-                    }
-                </NestedList>
-            </MudListItem>
-        }
-    </MudList>
+    <MudTable T="ContainerBackupResponse" Items="@_backups">
+        <ColGroup>
+            <col width="60px" />
+            <col width="200px" />
+            <col />
+        </ColGroup>
+        <RowTemplate>
+            <MudTd DataLabel="Restore">
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => RestoreBackup(context.Id))">
+                    Restore
+                </MudButton>
+            </MudTd>
+            <MudTd DataLabel="Created At">@context.CreatedAt.ToLocalTime().ToString()</MudTd>
+            <MudTd DataLabel="Items">
+                @foreach (var file in context.Files)
+                {
+                    <MudText Typo="Typo.body1">@file.ContainerPath</MudText>
+                }
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
 }

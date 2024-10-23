@@ -19,4 +19,9 @@ public partial class Backup
         _backups = null;
         _backups = await Client.GetBackupsForContainerAsync(ContainerName);
     }
+
+    private async Task RestoreBackup(Guid backupId)
+    {
+
+    }
 }
