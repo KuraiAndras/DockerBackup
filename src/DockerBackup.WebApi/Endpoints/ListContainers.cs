@@ -23,9 +23,9 @@ public static class ListContainers
                 Image: c.Image,
                 Status: c.Status,
                 State: c.State,
-                BackupDirectories: c.Mounts
-                    .Where(m => m.Type == "bind")
-                    .Select(m => m.Source)
+                BackupDirectories: c.Labels
+                    .Where(l => l.Key.StartsWith("backup.dir."))
+                    .Select(l => l.Value)
                     .ToList()
             ))
             .ToArray());
