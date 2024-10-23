@@ -26,6 +26,10 @@ public static class Endpoints
             .MapGet("{containerName}", GetBackupsForContainer.Handle)
             .WithName("get-backups-for-container");
 
+        backups
+            .MapPost("{backupId}/restore", RestoreContainer.Handle)
+            .WithName("restore-backup");
+
         return app;
     }
 

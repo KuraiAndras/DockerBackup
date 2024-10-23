@@ -1,4 +1,5 @@
 using DockerBackup.ApiClient;
+using DockerBackup.WebClient.Extensions;
 
 using Microsoft.AspNetCore.Components;
 
@@ -17,5 +18,11 @@ public partial class Backup
     protected override async Task RefreshInternal() =>
         _backups = await Client.GetBackupsForContainerAsync(ContainerName);
 
-    private void RestoreBackup(Guid backupId) => Snackbar.Add($"{backupId}, Not yet implemented", Severity.Error);
+    private async Task RestoreBackup(Guid backupId) =>
+        await Snackbar.Run
+        (
+            async () => await Client.RestoreBackupAsync(backupId),
+            "Restored backup",
+            "Restoring backup failed"
+        );
 }
