@@ -23,7 +23,7 @@ public static class Endpoints
             .WithName("get-backups");
 
         backups
-            .MapGet("{containerId}", GetBackupsForContainer.Handle)
+            .MapGet("{containerName}", GetBackupsForContainer.Handle)
             .WithName("get-backups-for-container");
 
         return app;

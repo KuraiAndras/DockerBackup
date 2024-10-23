@@ -44,7 +44,7 @@ namespace DockerBackup.ApiClient
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<ContainerBackupResponse>> GetBackupsForContainerAsync(System.Guid containerId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<ContainerBackupResponse>> GetBackupsForContainerAsync(string containerName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -319,10 +319,10 @@ namespace DockerBackup.ApiClient
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<ContainerBackupResponse>> GetBackupsForContainerAsync(System.Guid containerId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.List<ContainerBackupResponse>> GetBackupsForContainerAsync(string containerName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (containerId == null)
-                throw new System.ArgumentNullException("containerId");
+            if (containerName == null)
+                throw new System.ArgumentNullException("containerName");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -335,9 +335,9 @@ namespace DockerBackup.ApiClient
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "api/backups/{containerId}"
+                    // Operation Path: "api/backups/{containerName}"
                     urlBuilder_.Append("api/backups/");
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(containerId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(containerName, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

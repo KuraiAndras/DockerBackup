@@ -1,4 +1,4 @@
-@page "/backups/{containerId:guid}"
+@page "/backups/{containerName}"
 
 @if (_backups is null)
 {
@@ -8,5 +8,19 @@ else
 {
     <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
 
-    @System.Text.Json.JsonSerializer.Serialize(_backups)
+    <MudList T="ContainerBackupResponse">
+        <MudListSubheader>
+        </MudListSubheader>
+        @foreach (var backup in _backups)
+        {
+            <MudListItem Text="@backup.CreatedAt.ToLocalTime().ToString()">
+                <NestedList>
+                    @foreach(var file in backup.Files)
+                    {
+                        <MudListItem Text="@file.ContainerPath" />
+                    }
+                </NestedList>
+            </MudListItem>
+        }
+    </MudList>
 }

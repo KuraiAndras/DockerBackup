@@ -18,5 +18,5 @@ public partial class Backups
     private async Task Refresh() => _backups = await Client.GetBackupsAsync();
 
     private void BackupClicked(TableRowClickEventArgs<ListContainerBackupResponse> tableRowClickEventArgs) =>
-        Navigation.NavigateTo(Backup.PageUri(tableRowClickEventArgs.Item!.Id));
+        Navigation.NavigateTo(Backup.PageUri(tableRowClickEventArgs.Item!.ContainerName));
 }

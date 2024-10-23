@@ -6,7 +6,7 @@ namespace DockerBackup.WebClient.Pages;
 
 public partial class Backup
 {
-    [Parameter] public required Guid ContainerId { get; init; }
+    [Parameter] public required string ContainerName { get; init; }
 
     [Inject] public required IClient Client { get; init; }
 
@@ -14,5 +14,9 @@ public partial class Backup
 
     override protected async Task OnInitializedAsync() => await Refresh();
 
-    private async Task Refresh() => _backups = await Client.GetBackupsForContainerAsync(ContainerId);
+    private async Task Refresh()
+    {
+        _backups = null;
+        _backups = await Client.GetBackupsForContainerAsync(ContainerName);
+    }
 }

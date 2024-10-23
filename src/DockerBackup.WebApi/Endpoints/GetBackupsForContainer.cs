@@ -1,3 +1,5 @@
+using System.Web;
+
 using DockerBackup.ApiClient;
 using DockerBackup.WebApi.Database;
 using DockerBackup.WebApi.Results;
@@ -17,10 +19,12 @@ public sealed class GetBackupsForContainer
         NotFound<ProblemDetails>,
         InternalServerError<ProblemDetails>
     >>
-    Handle([FromRoute, BindRequired] Guid containerId, ApplicationDb db, CancellationToken cancellationToken = default)
+    Handle([FromRoute, BindRequired] string containerName, ApplicationDb db, CancellationToken cancellationToken = default)
     {
+        containerName = HttpUtility.UrlDecode(containerName);
+
         var containers = await db.ContainerBackups
-            .Where(b => b.Id == containerId)
+            .Where(b => b.ContainerName == containerName)
             .Select(b => new ContainerBackupResponse
             (
                 b.Id,
@@ -34,8 +38,8 @@ public sealed class GetBackupsForContainer
             ? TypedResults.NotFound(new ProblemDetails
             {
                 Status = StatusCodes.Status404NotFound,
-                Title = $"Container {containerId} not found",
+                Title = $"Container {containerName} not found",
             })
-            : TypedResults.Ok(containers);
+            : TypedResults.Ok(containers.OrderByDescending(c => c.CreatedAt).ToArray());
     }
 }
