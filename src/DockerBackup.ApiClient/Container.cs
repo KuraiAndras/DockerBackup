@@ -18,8 +18,8 @@ public record Container(
     public string ShortId => Id[..12];
 }
 
-public record ListContainerBackupResponse(Guid Id, string ContainerName, DateTimeOffset? LastBackupAt, int? NumberOfBackups);
+public record ListContainerBackupResponse(Guid Id, string ContainerName, DateTime? LastBackupAt, int? NumberOfBackups);
 
-public record ContainerBackupResponse(Guid Id, string ContainerName, DateTimeOffset CreatedAt, FileBackupResponse[] Files);
+public record ContainerBackupResponse(Guid Id, string ContainerName, DateTime CreatedAt, FileBackupResponse[] Files);
 
 public record FileBackupResponse(Guid Id, string FilePath, string ContainerPath);

@@ -17,7 +17,7 @@ namespace DockerBackup.WebApi.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ContainerName = table.Column<string>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,9 +29,9 @@ namespace DockerBackup.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ContainerBackupId = table.Column<Guid>(type: "TEXT", nullable: false),
                     FilePath = table.Column<string>(type: "TEXT", nullable: false),
-                    ContainerPath = table.Column<string>(type: "TEXT", nullable: false)
+                    ContainerPath = table.Column<string>(type: "TEXT", nullable: false),
+                    ContainerBackupId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

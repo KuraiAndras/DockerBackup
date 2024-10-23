@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DockerBackup.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationDb))]
-    [Migration("20241020210224_AddBackups")]
+    [Migration("20241023091406_AddBackups")]
     partial class AddBackups
     {
         /// <inheritdoc />
@@ -30,7 +30,7 @@ namespace DockerBackup.WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

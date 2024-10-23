@@ -36,7 +36,7 @@ public sealed class CreateBackup
         ContainerListResponse? container = null;
         try
         {
-            var now = timeProvider.GetLocalNow();
+            var now = timeProvider.GetUtcNow().UtcDateTime;
 
             var containers = await docker.Containers.ListContainersAsync(new()
             {
