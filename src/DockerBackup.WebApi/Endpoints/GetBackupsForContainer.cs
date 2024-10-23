@@ -28,7 +28,6 @@ public sealed class GetBackupsForContainer
             .Select(b => new ContainerBackupResponse
             (
                 b.Id,
-                b.ContainerName,
                 b.CreatedAt,
                 b.Files.Select(f => new FileBackupResponse(f.Id, f.FilePath, f.ContainerPath)).ToArray()
             ))

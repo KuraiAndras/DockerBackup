@@ -20,6 +20,6 @@ public record Container(
 
 public record ListContainerBackupResponse(Guid Id, string ContainerName, DateTime? LastBackupAt, int? NumberOfBackups);
 
-public record ContainerBackupResponse(Guid Id, string ContainerName, DateTime CreatedAt, FileBackupResponse[] Files);
+public record ContainerBackupResponse(Guid Id, DateTime CreatedAt, FileBackupResponse[] Files);
 
 public record FileBackupResponse(Guid Id, string FilePath, string ContainerPath);

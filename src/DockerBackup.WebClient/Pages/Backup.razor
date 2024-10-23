@@ -1,5 +1,7 @@
 @page "/backups/{containerName}"
 
+<MudText Typo="@Typo.h4">@ContainerName</MudText>
+
 @if (_backups is null)
 {
     <MudProgressCircular Color="Color.Default" Indeterminate="true" />
@@ -15,7 +17,7 @@ else
         {
             <MudListItem Text="@backup.CreatedAt.ToLocalTime().ToString()">
                 <NestedList>
-                    @foreach(var file in backup.Files)
+                    @foreach (var file in backup.Files)
                     {
                         <MudListItem Text="@file.ContainerPath" />
                     }
