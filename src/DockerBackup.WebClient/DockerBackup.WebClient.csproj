@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.10" PrivateAssets="all" />
-    <PackageReference Include="MudBlazor" Version="7.12.1" />
+    <PackageReference Include="MudBlazor" Version="7.14.0" />
     <PackageReference Include="PodNet.Blazor.TypedRoutes" Version="1.0.0" />
   </ItemGroup>
 
