@@ -20,11 +20,12 @@ builder.Services.AddSingleton(TimeProvider.System);
 
 builder.Services.AddScoped<IDockerClient>(_ => new DockerClientConfiguration().CreateClient());
 
+builder.Services.Configure<ServerOptions>(builder.Configuration.GetSection(ServerOptions.Section));
 builder.Services.Configure<BackupOptions>(builder.Configuration.GetSection(BackupOptions.Section));
 
 builder.Services.AddDbContext<ApplicationDb>((sp, options) =>
 {
-    var backupOptions = sp.GetRequiredService<IOptions<BackupOptions>>().Value;
+    var backupOptions = sp.GetRequiredService<IOptions<ServerOptions>>().Value;
     options.UseSqlite($"Data Source={backupOptions.DatabaseFilePath()}");
 });
 
@@ -33,7 +34,7 @@ builder.Services.AddScoped<IDbSetup, DbSetup>();
 // Add Hangfire services.
 builder.Services.AddHangfire((sp, configuration) =>
 {
-    var backupOptions = sp.GetRequiredService<IOptions<BackupOptions>>().Value;
+    var backupOptions = sp.GetRequiredService<IOptions<ServerOptions>>().Value;
     configuration
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
         .UseSimpleAssemblyNameTypeSerializer()
@@ -53,7 +54,7 @@ if (app.Environment.IsDevelopment())
     app.UseOpenApi();
     app.UseSwaggerUi();
 
-    var backupOptions = app.Services.GetRequiredService<IOptions<BackupOptions>>().Value;
+    var backupOptions = app.Services.GetRequiredService<IOptions<ServerOptions>>().Value;
 
     backupOptions.BackupPath = Path.Combine(Directory.GetCurrentDirectory(), "backups");
     backupOptions.ConfigDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "config");

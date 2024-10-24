@@ -26,6 +26,7 @@ public sealed class CreateBackup
     (
         [FromBody, BindRequired] CreateBackupRequest request,
         ApplicationDb db,
+        IOptions<ServerOptions> serverOptions,
         IOptions<BackupOptions> backupOptions,
         IDockerClient docker,
         TimeProvider timeProvider,
@@ -61,7 +62,7 @@ public sealed class CreateBackup
                 .Select(m => m.Destination)
                 .ToArray();
 
-            var backupDirectory = Path.Combine(backupOptions.Value.BackupPath, request.ContainerName.TrimStart('/'), $"{now:yyyy-MM-ddTHH-mm-ss}");
+            var backupDirectory = Path.Combine(serverOptions.Value.BackupPath, request.ContainerName.TrimStart('/'), $"{now:yyyy-MM-ddTHH-mm-ss}");
 
             if (!Directory.Exists(backupDirectory))
             {
