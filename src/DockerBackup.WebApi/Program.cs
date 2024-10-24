@@ -4,6 +4,9 @@ using DockerBackup.WebApi.Database;
 using DockerBackup.WebApi.Endpoints;
 using DockerBackup.WebApi.Options;
 
+using Hangfire;
+using Hangfire.Storage.SQLite;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -22,12 +25,24 @@ builder.Services.Configure<BackupOptions>(builder.Configuration.GetSection(Backu
 builder.Services.AddDbContext<ApplicationDb>((sp, options) =>
 {
     var backupOptions = sp.GetRequiredService<IOptions<BackupOptions>>().Value;
-    var filePath = Path.Combine(backupOptions.ConfigDirectoryPath, backupOptions.DatabaseFileName);
-
-    options.UseSqlite($"Data Source={filePath}");
+    options.UseSqlite($"Data Source={backupOptions.DatabaseFilePath()}");
 });
 
 builder.Services.AddScoped<IDbSetup, DbSetup>();
+
+// Add Hangfire services.
+builder.Services.AddHangfire((sp, configuration) =>
+{
+    var backupOptions = sp.GetRequiredService<IOptions<BackupOptions>>().Value;
+    configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSQLiteStorage(backupOptions.HangfireDatabaseFilePath());
+});
+
+// Add the processing server as IHostedService
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -54,6 +69,8 @@ if (app.Environment.IsDevelopment())
         }
     }
 }
+
+app.UseHangfireDashboard();
 
 app.UseBlazorFrameworkFiles();
 app.MapFallbackToFile("index.html");

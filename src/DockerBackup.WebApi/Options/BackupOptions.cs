@@ -20,7 +20,16 @@ public sealed class BackupOptions
     public string DatabaseFileName { get; set; } = "DockerBackup.db";
 
     /// <summary>
+    /// The file name of the Hangfire SQLite database.
+    /// </summary>
+    public string HangfireDatabaseFileName { get; set; } = "hangfire.db";
+
+    /// <summary>
     /// The full path where all persistent data is stored except for backups.
     /// </summary>
     public string ConfigDirectoryPath { get; set; } = "/config";
+
+    public string DatabaseFilePath() => Path.Combine(ConfigDirectoryPath, DatabaseFileName);
+
+    public string HangfireDatabaseFilePath() => Path.Combine(ConfigDirectoryPath, HangfireDatabaseFileName);
 }
