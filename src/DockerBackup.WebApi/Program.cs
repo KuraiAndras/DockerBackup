@@ -2,6 +2,7 @@ using Docker.DotNet;
 
 using DockerBackup.WebApi.Database;
 using DockerBackup.WebApi.Endpoints;
+using DockerBackup.WebApi.Extensions;
 using DockerBackup.WebApi.Options;
 
 using Hangfire;
@@ -83,10 +84,6 @@ app.MapControllers();
 
 app.MapDockerBackup();
 
-await using (var scope = app.Services.CreateAsyncScope())
-{
-    var dbSetup = scope.ServiceProvider.GetRequiredService<IDbSetup>();
-    await dbSetup.Setup();
-}
+await app.RunJobAsync<IDbSetup>(async s => await s.Setup());
 
 await app.RunAsync();
