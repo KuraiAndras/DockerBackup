@@ -34,33 +34,12 @@ public sealed class CreateBackup
         CancellationToken cancellationToken = default)
     {
         var backupFilePaths = new List<string>();
-        ContainerListResponse? container = null;
+        ContainerInspectResponse? container = null;
         try
         {
             var now = timeProvider.GetUtcNow().UtcDateTime;
 
-            var containers = await docker.Containers.ListContainersAsync(new()
-            {
-                All = true,
-            }, cancellationToken);
-
-            container = containers.SingleOrDefault(c => c.Names.Contains(request.ContainerName));
-
-            if (container is null)
-            {
-                logger.LogWarning("Container {ContainerName} not found", request.ContainerName);
-                return TypedResults.NotFound(new ProblemDetails
-                {
-                    Status = StatusCodes.Status404NotFound,
-                    Title = $"Container {request.ContainerName} not found",
-                });
-            }
-
-            var containerPathsToBackUp = container.Mounts
-                .Where(m => m.Type == "bind")
-                .Where(m => request.Directories.Contains(m.Source))
-                .Select(m => m.Destination)
-                .ToArray();
+            container = await docker.Containers.InspectContainerAsync(request.ContainerName, cancellationToken);
 
             var backupDirectory = Path.Combine(serverOptions.Value.BackupPath, request.ContainerName.TrimStart('/'), $"{now:yyyy-MM-ddTHH-mm-ss}");
 
@@ -69,7 +48,7 @@ public sealed class CreateBackup
                 Directory.CreateDirectory(backupDirectory);
             }
 
-            if (container.State == "running")
+            if (container.State.Status == "running")
             {
                 await docker.Containers.StopContainerAsync(container.ID, new()
                 {
@@ -79,7 +58,11 @@ public sealed class CreateBackup
                 }, cancellationToken);
             }
 
-            foreach (var containerPathToBackUp in containerPathsToBackUp)
+            var backedUpContainerPaths = new List<string>();
+
+            foreach (var containerPathToBackUp in request.Directories ?? container.Config.Labels
+                .Where(l => l.Key.StartsWith("backup.dir"))
+                .Select(l => l.Value))
             {
                 await using DockerArchive archive = await docker.Containers.GetArchiveFromContainerAsync(container.ID, new()
                 {
@@ -91,13 +74,15 @@ public sealed class CreateBackup
 
                 await using var folderTarBall = File.Create(tarFileName);
                 await archive.Stream.CopyToAsync(folderTarBall, cancellationToken);
+
+                backedUpContainerPaths.Add(containerPathToBackUp);
             }
 
             var containerBackup = new ContainerBackup
             {
                 ContainerName = request.ContainerName,
                 CreatedAt = now,
-                Files = containerPathsToBackUp.Select((containerPathToBackUp, i) => new FileBackup
+                Files = backedUpContainerPaths.Select((containerPathToBackUp, i) => new FileBackup
                 {
                     FilePath = backupFilePaths[i],
                     ContainerPath = containerPathToBackUp,
@@ -111,6 +96,15 @@ public sealed class CreateBackup
             (
                 BackupId: containerBackup.Id
             ));
+        }
+        catch (DockerContainerNotFoundException e)
+        {
+            logger.LogWarning(e, "Container {ContainerName} not found", request.ContainerName);
+            return TypedResults.NotFound(new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Title = $"Container {request.ContainerName} not found",
+            });
         }
         catch (Exception e)
         {
@@ -131,7 +125,7 @@ public sealed class CreateBackup
         }
         finally
         {
-            if (container?.State == "running")
+            if (container?.State.Status == "running")
             {
                 await docker.Containers.StartContainerAsync(container.ID, new(), cancellationToken);
             }
