@@ -60,9 +60,11 @@ public sealed class CreateBackup
 
             var backedUpContainerPaths = new List<string>();
 
-            foreach (var containerPathToBackUp in request.Directories ?? container.Config.Labels
-                .Where(l => l.Key.StartsWith("backup.dir"))
-                .Select(l => l.Value))
+            foreach (var containerPathToBackUp in request.Directories is { Count: > 0 }
+                ? request.Directories
+                : container.Config.Labels
+                    .Where(l => l.Key.StartsWith("backup.dir"))
+                    .Select(l => l.Value))
             {
                 await using DockerArchive archive = await docker.Containers.GetArchiveFromContainerAsync(container.ID, new()
                 {
