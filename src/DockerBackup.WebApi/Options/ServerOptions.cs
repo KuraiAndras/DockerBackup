@@ -28,18 +28,3 @@ public sealed class ServerOptions
 
     public string HangfireDatabaseFilePath() => Path.Combine(ConfigDirectoryPath, HangfireDatabaseFileName);
 }
-
-public sealed class BackupOptions
-{
-    public const string Section = "Backup";
-
-    /// <summary>
-    /// The default time in milliseconds to wait for a container to stop before stopping it.
-    /// </summary>
-    public uint DefaultWaitForContainerStopMs { get; set; } = 5000;
-
-    /// <summary>
-    /// The default cron expression for the backup job.
-    /// </summary>
-    public string Cron { get; set; } = "0 4 * * *";
-}

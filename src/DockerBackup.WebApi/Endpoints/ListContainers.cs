@@ -1,6 +1,7 @@
 using Docker.DotNet;
 
 using DockerBackup.ApiClient;
+using DockerBackup.WebApi.Extensions;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -23,10 +24,7 @@ public static class ListContainers
                 Image: c.Image,
                 Status: c.Status,
                 State: c.State,
-                BackupDirectories: c.Labels
-                    .Where(l => l.Key.StartsWith("backup.dir."))
-                    .Select(l => l.Value)
-                    .ToList()
+                BackupDirectories: c.GetBackupPaths().ToList()
             ))
             .ToArray());
     }

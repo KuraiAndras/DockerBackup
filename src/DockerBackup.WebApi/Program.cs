@@ -3,6 +3,7 @@ using Docker.DotNet;
 using DockerBackup.WebApi.Database;
 using DockerBackup.WebApi.Endpoints;
 using DockerBackup.WebApi.Extensions;
+using DockerBackup.WebApi.Jobs;
 using DockerBackup.WebApi.Options;
 
 using Hangfire;
@@ -30,7 +31,8 @@ builder.Services.AddDbContext<ApplicationDb>((sp, options) =>
     options.UseSqlite($"Data Source={backupOptions.DatabaseFilePath()}");
 });
 
-builder.Services.AddScoped<IDbSetup, DbSetup>();
+builder.Services.AddScoped<DbSetup>();
+builder.Services.AddScoped<SetupContainerScan>();
 
 // Add Hangfire services.
 builder.Services.AddHangfire((sp, configuration) =>
@@ -84,6 +86,7 @@ app.MapControllers();
 
 app.MapDockerBackup();
 
-await app.RunJobAsync<IDbSetup>(async s => await s.Setup());
+await app.RunJob<DbSetup>(s => s.Setup());
+await app.RunJob<SetupContainerScan>(s => s.Setup());
 
 await app.RunAsync();

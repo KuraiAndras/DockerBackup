@@ -44,6 +44,6 @@ public partial class Containers
                 ? selectedBackups
                 : container.BackupDirectories,
             WaitForContainerStopMs: null
-        )), $"Backing up {container.Name} successful", $"Backing up {container.Name} failed");
+        )), $"Backup job of {container.Name} started", $"Queueing backup of {container.Name} failed");
     }
 }
