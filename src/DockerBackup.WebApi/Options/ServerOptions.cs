@@ -24,6 +24,11 @@ public sealed class ServerOptions
     /// </summary>
     public string ConfigDirectoryPath { get; set; } = "/config";
 
+    /// <summary>
+    /// Whether to map the hangifre dashboard in the request pipeline
+    /// </summary>
+    public bool HangfireDashboard { get; set; } = true;
+
     public string DatabaseFilePath() => Path.Combine(ConfigDirectoryPath, DatabaseFileName);
 
     public string HangfireDatabaseFilePath() => Path.Combine(ConfigDirectoryPath, HangfireDatabaseFileName);

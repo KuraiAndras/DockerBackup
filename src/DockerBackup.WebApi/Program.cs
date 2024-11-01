@@ -74,7 +74,15 @@ if (app.Environment.IsDevelopment())
     }
 }
 
-app.UseHangfireDashboard();
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var serverOptions = scope.ServiceProvider.GetRequiredService<IOptions<ServerOptions>>();
+
+    if (serverOptions.Value.HangfireDashboard)
+    {
+        app.UseHangfireDashboard();
+    }
+}
 
 app.UseBlazorFrameworkFiles();
 app.MapFallbackToFile("index.html");
