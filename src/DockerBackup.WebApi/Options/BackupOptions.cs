@@ -18,4 +18,9 @@ public sealed class BackupOptions
     /// Cron for checking containers for backup configurations.
     /// </summary>
     public string ContainerScanCron { get; set; } = "*/10 * * * *";
+
+    /// <summary>
+    /// Whether to run container scans on startup.
+    /// </summary>
+    public bool ScanContainersOnStartup { get; set; } = true;
 }
