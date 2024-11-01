@@ -29,7 +29,16 @@ public sealed class GetBackupsForContainer
             (
                 b.Id,
                 b.CreatedAt,
-                b.Files.OrderBy(f => f.ContainerPath).Select(f => new FileBackupResponse(f.Id, f.FilePath, f.ContainerPath)).ToArray()
+                b.Files
+                    .OrderBy(f => f.ContainerPath)
+                    .Select(f => new FileBackupResponse
+                        (
+                            f.Id,
+                            f.FilePath,
+                            f.ContainerPath,
+                            f.SizeInBytes
+                        ))
+                    .ToArray()
             ))
             .ToArrayAsync(cancellationToken);
 

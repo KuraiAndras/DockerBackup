@@ -31,6 +31,7 @@ namespace DockerBackup.WebApi.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     FilePath = table.Column<string>(type: "TEXT", nullable: false),
                     ContainerPath = table.Column<string>(type: "TEXT", nullable: false),
+                    SizeInBytes = table.Column<long>(type: "INTEGER", nullable: false),
                     ContainerBackupId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

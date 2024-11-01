@@ -24,9 +24,9 @@ public sealed class BackupContainerJob
 {
     public async Task DoBackup(BackupJobParameters parameters, CancellationToken cancellationToken = default)
     {
-        var backupFilePaths = new List<string>();
+        var backupFilePaths = new List<FileInfo>();
         ContainerInspectResponse? container = null;
-        
+
         try
         {
             var now = timeProvider.GetUtcNow().UtcDateTime;
@@ -68,7 +68,7 @@ public sealed class BackupContainerJob
                 }, statOnly: false, cancellationToken);
 
                 var tarFileName = Path.Combine(backupDirectory, $"{containerPathToBackUp.TrimStart('/').Replace("/", "__")}.tar");
-                backupFilePaths.Add(tarFileName);
+                backupFilePaths.Add(new(tarFileName));
 
                 await using var folderTarBall = File.Create(tarFileName);
                 await archive.Stream.CopyToAsync(folderTarBall, cancellationToken);
@@ -80,11 +80,12 @@ public sealed class BackupContainerJob
             {
                 ContainerName = parameters.ContainerName,
                 CreatedAt = now,
-                Files = backedUpContainerPaths.Select((containerPathToBackUp, i) => new FileBackup
-                {
-                    FilePath = backupFilePaths[i],
-                    ContainerPath = containerPathToBackUp,
-                }).ToList(),
+                Files = backedUpContainerPaths.Select((containerPathToBackUp, i) => FileBackup.Create
+                (
+                    filePath: backupFilePaths[i].FullName,
+                    containerPath: containerPathToBackUp,
+                    sizeInBytes: backupFilePaths[i].Length
+                )).ToList(),
             };
             db.ContainerBackups.Add(containerBackup);
 
@@ -94,9 +95,10 @@ public sealed class BackupContainerJob
         {
             foreach (var backupFilePath in backupFilePaths)
             {
-                if (File.Exists(backupFilePath))
+
+                if (backupFilePath.Exists)
                 {
-                    File.Delete(backupFilePath);
+                    backupFilePath.Delete();
                 }
             }
 

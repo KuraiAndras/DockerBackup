@@ -10,6 +10,7 @@
     <ColGroup>
         <col width="60px" />
         <col width="200px" />
+        <col width="100px" />
         <col />
     </ColGroup>
     <RowTemplate>
@@ -19,6 +20,7 @@
             </MudButton>
         </MudTd>
         <MudTd DataLabel="Created At">@context.CreatedAt.ToLocalTime().ToString()</MudTd>
+        <MudTd DataLabel="Size">@UnitHelper.HumanReadableSize(context.SizeInBytes)</MudTd>
         <MudTd DataLabel="Items">
             @foreach (var file in context.Files)
             {

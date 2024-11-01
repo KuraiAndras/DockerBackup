@@ -18,8 +18,12 @@ public record Container(
     public string ShortId => Id[..12];
 }
 
-public record ListContainerBackupResponse(Guid Id, string ContainerName, DateTime? LastBackupAt, int? NumberOfBackups);
+public record ListContainerBackupResponse(Guid Id, string ContainerName, DateTime? LastBackupAt, int? NumberOfBackups, long? SizeInBytes);
 
-public record ContainerBackupResponse(Guid Id, DateTime CreatedAt, FileBackupResponse[] Files);
+public record ContainerBackupResponse(Guid Id, DateTime CreatedAt, FileBackupResponse[] Files)
+{
+    [JsonIgnore]
+    public long SizeInBytes => Files.Sum(f => f.SizeInBytes);
+}
 
-public record FileBackupResponse(Guid Id, string FilePath, string ContainerPath);
+public record FileBackupResponse(Guid Id, string FilePath, string ContainerPath, long SizeInBytes);

@@ -16,7 +16,8 @@ public sealed class ListBackups
                     b.First().Id,
                     b.Key,
                     b.OrderBy(b => b.CreatedAt).Last().CreatedAt,
-                    b.Count()
+                    b.Count(),
+                    b.Sum(x => x.Files.Sum(y => y.SizeInBytes))
                 ))
                 .ToArrayAsync(cancellationToken));
 }

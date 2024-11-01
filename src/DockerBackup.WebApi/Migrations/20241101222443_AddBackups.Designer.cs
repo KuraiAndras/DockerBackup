@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DockerBackup.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationDb))]
-    [Migration("20241023091406_AddBackups")]
+    [Migration("20241101222443_AddBackups")]
     partial class AddBackups
     {
         /// <inheritdoc />
@@ -54,6 +54,9 @@ namespace DockerBackup.WebApi.Migrations
                     b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("SizeInBytes")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

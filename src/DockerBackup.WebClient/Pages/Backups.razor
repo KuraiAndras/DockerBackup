@@ -25,10 +25,17 @@
                 Count
             </MudTableSortLabel>
         </MudTh>
+        <MudTh>
+            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
+                SortBy="new Func<ListContainerBackupResponse, object?>(x=>x.SizeInBytes)">
+                Size
+            </MudTableSortLabel>
+        </MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Name">@context.ContainerName</MudTd>
         <MudTd DataLabel="ID">@context.LastBackupAt</MudTd>
         <MudTd DataLabel="Image">@context.NumberOfBackups</MudTd>
+        <MudTd DataLabel="Size">@UnitHelper.HumanReadableSize(context.SizeInBytes)</MudTd>
     </RowTemplate>
 </MudTable>
