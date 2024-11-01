@@ -11,10 +11,14 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    container:
+      image: alpine:3.20
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - uses: actions/setup-dotnet@v4
+
       - name: "Run build"
-        run: ./build.sh --targets test --configuration Release --verbosity detailed
+        run: ./build.sh --targets test --configuration Release --verbosity normal
