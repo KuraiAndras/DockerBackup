@@ -17,4 +17,4 @@ jobs:
           fetch-depth: 0
 
       - name: "Run build"
-        run: ./build.sh --targets test --configuration Release
+        run: ./build.sh --targets test --configuration Release --verbosity detailed
