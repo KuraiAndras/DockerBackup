@@ -10,7 +10,7 @@ services:
     image: nginx:latest
     labels:
       - backup.dir.0=/storage1
-      - backup.cron=0 4 * * *
+      - backup.cron=0 5 * * *
     volumes:
       - ./service2-1:/storage1
       - ./service2-2:/storage2

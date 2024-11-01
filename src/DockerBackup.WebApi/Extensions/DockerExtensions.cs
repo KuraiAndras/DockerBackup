@@ -8,7 +8,7 @@ public static class DockerExtensions
     public static class Keys
     {
         public const string Directory = "backup.dir";
-        public const string Cron = "backup.dir";
+        public const string Cron = "backup.cron";
     }
 
     public static bool NeedsBackup(this ContainerListResponse container) =>
