@@ -62,7 +62,7 @@ internal static class Program
 
         Target("test", DependsOn("build"), () => RunAsync("dotnet", $"test --configuration {configuration} --no-build --nologo --verbosity {verbosity}"));
 
-        Target("generate-httpclient", DependsOn("build", "restore-tools"), () => RunAsync("dotnet", $"nswag run {Path.Combine("src", "DockerBackup.ApiClient", "DockerBackup.nswag.json")} /variables:Configuration={configuration}"));
+        Target("generate-httpclient", DependsOn("build", "restore-tools"), () => RunAsync("dotnet", $"nswag run .nswag.json /variables:Configuration={configuration}"));
 
         Target("default", DependsOn("test"));
 
