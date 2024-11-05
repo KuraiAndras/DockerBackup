@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DockerBackup.WebApi.Database;
 
-public sealed class ApplicationDb(DbContextOptions<ApplicationDb> options) : DbContext(options)
+public sealed class ApplicationDb(DbContextOptions<ApplicationDb> options) : IdentityDbContext<AppUser>(options)
 {
     public DbSet<ContainerBackup> ContainerBackups { get; set; } = default!;
     public DbSet<FileBackup> FileBackups { get; set; } = default!;

@@ -1,3 +1,5 @@
+using DockerBackup.WebApi.Database;
+
 namespace DockerBackup.WebApi.Endpoints;
 
 public static class Endpoints
@@ -5,6 +7,8 @@ public static class Endpoints
     public static IEndpointRouteBuilder MapDockerBackup(this IEndpointRouteBuilder app)
     {
         var api = app.MapGroup("api");
+
+        api.MapIdentityApi<AppUser>();
 
         var containers = api.MapGroup("containers");
 

@@ -9,6 +9,7 @@ using DockerBackup.WebApi.Options;
 using Hangfire;
 using Hangfire.Storage.SQLite;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -30,6 +31,14 @@ builder.Services.AddDbContext<ApplicationDb>((sp, options) =>
     var backupOptions = sp.GetRequiredService<IOptions<ServerOptions>>().Value;
     options.UseSqlite($"Data Source={backupOptions.DatabaseFilePath()}");
 });
+
+builder.Services
+    .AddAuthentication(IdentityConstants.ApplicationScheme)
+    .AddIdentityCookies();
+builder.Services.AddAuthorizationBuilder();
+builder.Services.AddIdentityCore<AppUser>()
+    .AddEntityFrameworkStores<ApplicationDb>()
+    .AddApiEndpoints();
 
 builder.Services.AddScoped<DbSetup>();
 builder.Services.AddScoped<SetupContainerScan>();
@@ -89,8 +98,6 @@ app.MapFallbackToFile("index.html");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.MapControllers();
 
 app.MapDockerBackup();
 
