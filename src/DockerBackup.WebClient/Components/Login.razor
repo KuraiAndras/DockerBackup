@@ -1,0 +1,13 @@
+@* TODO: make this nicer *@
+
+<EditForm Model="@_model" OnSubmit="OnSubmit">
+    <MudPaper Class="pa-4">
+        <MudTextField Label="First name" @bind-Value="_model.UserName"
+            For="@(() => _model.UserName)" />
+        <MudTextField Label="Password" Class="mt-3" @bind-Value="_model.Password"
+            For="@(() => _model.Password)" InputType="InputType.Password" />
+    </MudPaper>
+    <MudPaper Class="pa-4 mt-4">
+        <MudButton ButtonType="ButtonType.Submit">Login</MudButton>
+    </MudPaper>
+</EditForm>

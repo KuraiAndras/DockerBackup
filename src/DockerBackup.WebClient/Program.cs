@@ -3,25 +3,25 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using DockerBackup.WebClient;
 using MudBlazor.Services;
 using DockerBackup.ApiClient;
-using System.Text.Json;
 using DockerBackup.WebClient.Interop;
 using MudBlazor;
+using DockerBackup.WebClient.Auth;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddScoped<IClient, Client>(sp =>
-{
-    var client = new Client(sp.GetRequiredService<HttpClient>());
+builder.Services.AddTransient<CookieHandler>();
 
-    client.JsonSerializerSettings.WriteIndented = false;
-    client.JsonSerializerSettings.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-    client.JsonSerializerSettings.PropertyNameCaseInsensitive = true;
+builder.Services
+    .AddHttpClient<IClient, Client>(http => http.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+    .AddHttpMessageHandler<CookieHandler>();
 
-    return client;
-});
+builder.Services.AddAuthorizationCore();
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthenticationStateProvider>();
+builder.Services.AddScoped<CookieAuthenticationStateProvider, CookieAuthenticationStateProvider>(sp => (CookieAuthenticationStateProvider)sp.GetRequiredService<AuthenticationStateProvider>());
 
 builder.Services.AddMudServices(config =>
 {

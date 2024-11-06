@@ -3,8 +3,6 @@ using DockerBackup.WebClient.Extensions;
 
 using Microsoft.AspNetCore.Components;
 
-using MudBlazor;
-
 namespace DockerBackup.WebClient.Pages;
 
 public partial class Backup

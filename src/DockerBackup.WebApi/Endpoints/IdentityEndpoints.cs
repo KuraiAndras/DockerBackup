@@ -27,6 +27,8 @@ public static class IdentityEndpoints
     {
         ArgumentNullException.ThrowIfNull(endpoints);
 
+        // TODO: move endpoints to files
+
         var routeGroup = endpoints.MapGroup("");
 
         routeGroup.MapPost("/register", async Task<Results<Ok, ValidationProblem>>
