@@ -368,5 +368,14 @@ dotnet_naming_style.s_camelcase.capitalization = camel_case
 # IDE0160: Convert to block scoped namespace
 csharp_style_namespace_declarations = file_scoped:warning
 
+# Custom rules
+[*.cs]
+
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = warning
+
+# IDE0005: Using directive is unnecessary.
+dotnet_diagnostic.IDE0005.severity = warning
+
 [**/Migrations/*.cs]
 generated_code = true
