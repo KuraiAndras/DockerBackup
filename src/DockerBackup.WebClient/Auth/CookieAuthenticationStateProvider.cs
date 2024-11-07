@@ -30,9 +30,9 @@ public sealed class CookieAuthenticationStateProvider(IClient client) : Authenti
         return new(user);
     }
 
-    public async Task Login(LoginRequest loginRequest)
+    public async Task Login(LoginRequest request)
     {
-        await client.PostApiLoginAsync(loginRequest);
+        await client.PostApiLoginAsync(request);
 
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
@@ -42,5 +42,16 @@ public sealed class CookieAuthenticationStateProvider(IClient client) : Authenti
         await client.PostApiLogoutAsync();
 
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+    }
+
+    public async Task Register(RegisterRequest request)
+    {
+        await client.PostApiRegisterAsync(request);
+
+        await Login(new LoginRequest
+        {
+            UserName = request.UserName,
+            Password = request.Password,
+        });
     }
 }

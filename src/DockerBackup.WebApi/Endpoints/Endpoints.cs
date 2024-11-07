@@ -35,6 +35,6 @@ public static class Endpoints
         return app;
     }
 
-    public static RouteHandlerBuilder MapGet(this RouteGroupBuilder endpoints, Delegate handler) =>
+    private static RouteHandlerBuilder MapGet(this RouteGroupBuilder endpoints, Delegate handler) =>
         endpoints.MapGet("", handler);
 }

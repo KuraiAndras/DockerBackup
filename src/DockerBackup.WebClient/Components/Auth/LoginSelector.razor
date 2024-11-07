@@ -1,0 +1,18 @@
+@switch (_areUsersSetUp)
+{
+    case null:
+        {
+            <MudProgressCircular Indeterminate="true" />
+            break;
+        }
+    case false:
+        {
+            <Register />
+            break;
+        }
+    case true:
+        {
+            <Login />
+            break;
+        }
+}

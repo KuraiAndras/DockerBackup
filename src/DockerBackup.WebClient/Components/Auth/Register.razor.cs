@@ -9,18 +9,24 @@ using Microsoft.AspNetCore.Components.Forms;
 
 using MudBlazor;
 
-namespace DockerBackup.WebClient.Components;
-public partial class Login
+namespace DockerBackup.WebClient.Components.Auth;
+
+public partial class Register
 {
     private class Model
     {
         public string? UserName { get; set; }
 
         public string? Password { get; set; }
+        public string? Password2 { get; set; }
 
         // TODO: fluent validation
-        [MemberNotNullWhen(true, nameof(UserName), nameof(Password))]
-        public bool IsValid() => UserName is not null && Password is not null;
+        [MemberNotNullWhen(true, nameof(UserName), nameof(Password), nameof(Password2))]
+        public bool IsValid() =>
+            UserName is not null
+            && Password is not null
+            && Password2 is not null
+            && Password == Password2;
     }
 
     private readonly Model _model = new();
@@ -33,17 +39,17 @@ public partial class Login
     {
         if (!_model.IsValid())
         {
-            Snackbar.Add("Login details are not valid", Severity.Error);
+            Snackbar.Add("Register details are not valid", Severity.Error);
             return;
         }
 
         await Snackbar.Run(async () =>
-            await Auth.Login(new LoginRequest()
+            await Auth.Register(new RegisterRequest()
             {
                 UserName = _model.UserName,
                 Password = _model.Password,
             }),
-            "Login successful",
-            "Login failed");
+            "Register successful",
+            "Register failed");
     }
 }

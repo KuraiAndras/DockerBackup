@@ -3,10 +3,12 @@ using System.Security.Claims;
 
 using DockerBackup.ApiClient;
 using DockerBackup.WebApi.Database;
+using DockerBackup.WebApi.Results;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DockerBackup.WebApi.Endpoints;
 
@@ -97,6 +99,14 @@ public static class IdentityEndpoints
             }
 
             return TypedResults.Ok(await CreateInfoResponseAsync(user, userManager));
+        });
+
+        accountGroup.MapGet("/user-set-up", async Task<Results<Ok<UserSetUpResponse>, InternalServerError<ProblemDetails>>>
+            (UserManager<AppUser> userManager, CancellationToken cancellationToken) =>
+        {
+            var areThereAnyUsers = await userManager.Users.AnyAsync(cancellationToken);
+
+            return TypedResults.Ok<UserSetUpResponse>(new(areThereAnyUsers));
         });
     }
 
