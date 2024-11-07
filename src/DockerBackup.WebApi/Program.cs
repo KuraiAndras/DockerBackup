@@ -2,6 +2,7 @@ using Docker.DotNet;
 
 using DockerBackup.WebApi.Database;
 using DockerBackup.WebApi.Endpoints;
+using DockerBackup.WebApi.Endpoints.Identity;
 using DockerBackup.WebApi.Extensions;
 using DockerBackup.WebApi.Jobs;
 using DockerBackup.WebApi.Options;
@@ -22,6 +23,7 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton(TimeProvider.System);
 
 builder.Services.AddScoped<IDockerClient>(_ => new DockerClientConfiguration().CreateClient());
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 builder.Services.Configure<ServerOptions>(builder.Configuration.GetSection(ServerOptions.Section));
 builder.Services.Configure<BackupOptions>(builder.Configuration.GetSection(BackupOptions.Section));
