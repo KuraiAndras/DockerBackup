@@ -4,7 +4,7 @@ namespace DockerBackup.ApiClient;
 /// The request type for the "/manage/info" endpoint.
 /// All properties are optional. No modifications will be made to the user if all the properties are omitted from the request.
 /// </summary>
-public sealed class InfoRequest
+public sealed class ChangePasswordRequest
 {
     /// <summary>
     /// The optional new password for the authenticated user. If a new password is provided, the <see cref="OldPassword"/> is required.

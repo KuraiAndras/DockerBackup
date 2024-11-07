@@ -1,3 +1,5 @@
+using DockerBackup.WebApi.Endpoints.Identity;
+
 namespace DockerBackup.WebApi.Endpoints;
 
 public static class Endpoints
@@ -12,25 +14,25 @@ public static class Endpoints
 
         containers
             .MapGet(ListContainers.Handle)
-            .WithName("get-containers");
+            .WithOpenApi("containers", "get-containers");
 
         containers
             .MapPost("create-backup", CreateBackup.Handle)
-            .WithName("create-backup");
+            .WithOpenApi("containers", "create-backup");
 
         var backups = api.MapGroup("backups");
 
         backups
             .MapGet(ListBackups.Handle)
-            .WithName("get-backups");
+            .WithOpenApi("backups", "get-backups");
 
         backups
             .MapGet("{containerName}", GetBackupsForContainer.Handle)
-            .WithName("get-backups-for-container");
+            .WithOpenApi("backups", "get-backups-for-container");
 
         backups
             .MapPost("{backupId}/restore", RestoreContainer.Handle)
-            .WithName("restore-backup");
+            .WithOpenApi("backups", "restore-backup");
 
         return app;
     }
