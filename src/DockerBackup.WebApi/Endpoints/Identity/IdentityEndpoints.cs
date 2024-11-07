@@ -21,35 +21,35 @@ public static class IdentityEndpoints
     {
         ArgumentNullException.ThrowIfNull(endpoints);
 
-        var routeGroup = endpoints.MapGroup("identity");
+        var identityGroup = endpoints.MapGroup("identity");
 
-        routeGroup
+        identityGroup
             .MapPost("/register", Register.Handle)
             .WithName("register")
             .WithTags("identity");
 
-        routeGroup
+        identityGroup
             .MapPost("/login", Login.Handle)
             .WithOpenApi("identity", "login");
 
-        routeGroup
+        identityGroup
             .MapPost("/logout", Logout.Handle)
             .WithOpenApi("identity", "logout");
 
-        var accountGroup = routeGroup
+        identityGroup
+            .MapGet("/user-set-up", UserSetUp.Handle)
+            .WithOpenApi("manage", "user-set-up");
+
+        var manageGroup = identityGroup
             .MapGroup("/manage")
             .RequireAuthorization();
 
-        accountGroup
+        manageGroup
             .MapGet("/info", Info.Handle)
             .WithOpenApi("manage", "info");
 
-        accountGroup
+        manageGroup
             .MapPost("/changePassword", ChangePassword.Handle)
             .WithOpenApi("manage", "change-password");
-
-        accountGroup
-            .MapGet("/user-set-up", UserSetUp.Handle)
-            .WithOpenApi("manage", "user-set-up");
     }
 }
