@@ -14,7 +14,7 @@ public sealed class CookieAuthenticationStateProvider(IClient client) : Authenti
 
         try
         {
-            var userInfo = await client.GetApiManageInfoAsync();
+            var userInfo = await client.InfoAsync();
             var claims = new List<Claim>
             {
                 new(ClaimTypes.Name, userInfo.UserName)
@@ -32,21 +32,21 @@ public sealed class CookieAuthenticationStateProvider(IClient client) : Authenti
 
     public async Task Login(LoginRequest request)
     {
-        await client.PostApiLoginAsync(request);
+        await client.LoginAsync(request);
 
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 
     public async Task Logout()
     {
-        await client.PostApiLogoutAsync();
+        await client.LogoutAsync();
 
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 
     public async Task Register(RegisterRequest request)
     {
-        await client.PostApiRegisterAsync(request);
+        await client.RegisterAsync(request);
 
         await Login(new LoginRequest
         {

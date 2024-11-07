@@ -2,9 +2,9 @@ using System.Text.Json;
 
 namespace DockerBackup.ApiClient;
 
-partial class Client
+public abstract partial class ClientBase
 {
-    static partial void UpdateJsonSerializerSettings(JsonSerializerOptions settings)
+    protected static void UpdateJsonSerializerSettings(JsonSerializerOptions settings)
     {
         settings.WriteIndented = false;
         settings.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;

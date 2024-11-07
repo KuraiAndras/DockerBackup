@@ -20,7 +20,7 @@
   },
   "codeGenerators": {
     "openApiToCSharpClient": {
-      "clientBaseClass": null,
+      "clientBaseClass": "ClientBase",
       "configurationClass": null,
       "generateClientClasses": true,
       "suppressClientClassesOutput": false,
@@ -40,7 +40,7 @@
       "generateBaseUrlProperty": true,
       "generateSyncMethods": false,
       "generatePrepareRequestAndProcessResponseAsAsyncMethods": false,
-      "exposeJsonSerializerSettings": true,
+      "exposeJsonSerializerSettings": false,
       "clientClassAccessModifier": "public",
       "typeAccessModifier": "public",
       "propertySetterAccessModifier": "",
@@ -50,12 +50,12 @@
       "contractsOutputFilePath": null,
       "parameterDateTimeFormat": "s",
       "parameterDateFormat": "yyyy-MM-dd",
-      "generateUpdateJsonSerializerSettingsMethod": true,
+      "generateUpdateJsonSerializerSettingsMethod": false,
       "useRequestAndResponseSerializationSettings": false,
       "serializeTypeInformation": false,
       "queryNullValue": "",
       "className": "{controller}Client",
-      "operationGenerationMode": "MultipleClientsFromOperationId",
+      "operationGenerationMode": "SingleClientFromOperationId",
       "additionalNamespaceUsages": [
         "DockerBackup.ApiClient.Infrastructure"
       ],

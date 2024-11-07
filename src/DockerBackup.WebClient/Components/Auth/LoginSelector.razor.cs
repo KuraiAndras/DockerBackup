@@ -11,7 +11,7 @@ public partial class LoginSelector
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await Client.GetApiManageUserSetUpAsync();
+        var response = await Client.UserSetUpAsync();
 
         _areUsersSetUp = response.IsUserSetUp;
     }
