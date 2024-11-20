@@ -1,7 +1,7 @@
 using Docker.DotNet;
-using Docker.DotNet.Models;
 
 using DockerBackup.WebApi.Database;
+using DockerBackup.WebApi.Domain;
 using DockerBackup.WebApi.Extensions;
 using DockerBackup.WebApi.Options;
 
@@ -22,37 +22,40 @@ public sealed class BackupContainerJob
     ApplicationDb db
 )
 {
-    public async Task DoBackup(BackupJobParameters parameters, CancellationToken cancellationToken = default)
+    public record Parameters(string ContainerName, List<string>? Directories = null);
+
+    public async Task DoBackup(Parameters parameters, CancellationToken cancellationToken = default)
     {
         var backupFilePaths = new List<FileInfo>();
-        ContainerInspectResponse? container = null;
+        ContainerBackupInfo? container = null;
 
         try
         {
             var now = timeProvider.GetUtcNow().UtcDateTime;
 
-            container = await docker.Containers.InspectContainerSafeAsync(parameters.ContainerName, cancellationToken);
+            var containerResponse = await docker.Containers.InspectContainerSafeAsync(parameters.ContainerName, cancellationToken);
 
-            if (container is null)
+            if (containerResponse is null)
             {
                 recurringJob.RemoveIfExists(parameters.ContainerName);
 
                 return;
             }
 
-            var backupDirectory = Path.Combine(serverOptions.Value.BackupPath, parameters.ContainerName.TrimStart('/'), $"{now:yyyy-MM-ddTHH-mm-ss}");
+            container = new ContainerBackupInfo(containerResponse, backupOptions.Value);
+
+            var backupDirectory = container.GetBackupDirectory(serverOptions.Value, now);
 
             if (!Directory.Exists(backupDirectory))
             {
                 Directory.CreateDirectory(backupDirectory);
             }
 
-            if (container.State.Status == "running")
+            if (container.IsRunning)
             {
-                await docker.Containers.StopContainerAsync(container.ID, new()
+                await docker.Containers.StopContainerAsync(container.Id, new()
                 {
-                    // TODO: wait time from config
-                    WaitBeforeKillSeconds = backupOptions.Value.DefaultWaitForContainerStopMs,
+                    WaitBeforeKillSeconds = container.WaitBeforeKill,
                 }, cancellationToken);
             }
 
@@ -60,14 +63,14 @@ public sealed class BackupContainerJob
 
             foreach (var containerPathToBackUp in parameters.Directories is { Count: > 0 }
                 ? parameters.Directories
-                : container.Config.GetBackupPaths())
+                : container.Directories)
             {
-                await using DockerArchive archive = await docker.Containers.GetArchiveFromContainerAsync(container.ID, new()
+                await using DockerArchive archive = await docker.Containers.GetArchiveFromContainerAsync(container.Id, new()
                 {
                     Path = containerPathToBackUp,
                 }, statOnly: false, cancellationToken);
 
-                var tarFileName = Path.Combine(backupDirectory, $"{containerPathToBackUp.TrimStart('/').Replace("/", "__")}.tar");
+                var tarFileName = ContainerBackupInfo.GetBackupFileName(backupDirectory, containerPathToBackUp);
                 backupFilePaths.Add(new(tarFileName));
 
                 await using var folderTarBall = File.Create(tarFileName);
@@ -107,9 +110,9 @@ public sealed class BackupContainerJob
         }
         finally
         {
-            if (container?.State.Status == "running")
+            if (container?.IsRunning == true)
             {
-                await docker.Containers.StartContainerAsync(container.ID, new(), cancellationToken);
+                await docker.Containers.StartContainerAsync(container.Id, new(), cancellationToken);
             }
         }
     }

@@ -1,6 +1,6 @@
 using Docker.DotNet;
 
-using DockerBackup.WebApi.Extensions;
+using DockerBackup.WebApi.Domain;
 using DockerBackup.WebApi.Options;
 
 using Hangfire;
@@ -17,15 +17,15 @@ public sealed class UpdateContainerConfigurations(IOptions<BackupOptions> option
     {
         var containers = await docker.Containers.ListContainersAsync(new() { All = true }, cancellationToken);
 
-        foreach (var container in containers.Where(c => c.NeedsBackup()))
+        foreach (var container in containers.Select(c => new ContainerBackupInfo(c, options.Value)).Where(c => c.NeedsBackup))
         {
-            var containerName = container.Names.First();
-            var parameters = new BackupJobParameters(containerName);
+            var containerName = container.Name;
+            var parameters = new BackupContainerJob.Parameters(containerName);
             recurringJob.AddOrUpdate<BackupContainerJob>
             (
-                container.Names.First().Replace("/", string.Empty),
+                containerName.Replace("/", string.Empty),
                 x => x.DoBackup(parameters, CancellationToken.None),
-                container.GetBackupCron() ?? options.Value.Cron
+                container.Cron
             );
         }
     }

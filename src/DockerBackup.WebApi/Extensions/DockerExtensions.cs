@@ -5,32 +5,6 @@ namespace DockerBackup.WebApi.Extensions;
 
 public static class DockerExtensions
 {
-    public static class Keys
-    {
-        public const string Directory = "backup.dir";
-        public const string Cron = "backup.cron";
-    }
-
-    public static bool NeedsBackup(this ContainerListResponse container) =>
-        container.Labels.Any(l => l.Key.StartsWith(Keys.Directory));
-
-    public static IEnumerable<string> GetBackupPaths(this Config config) =>
-        config.Labels.GetBackupPaths();
-
-    public static IEnumerable<string> GetBackupPaths(this ContainerListResponse container) =>
-        container.Labels.GetBackupPaths();
-
-    public static IEnumerable<string> GetBackupPaths(this IDictionary<string, string> labels) =>
-        labels
-            .Where(l => l.Key.StartsWith(Keys.Directory))
-            .Select(l => l.Value);
-
-    public static string? GetBackupCron(this ContainerListResponse container) =>
-        container.Labels
-            .Where(l => l.Key == Keys.Cron)
-            .Select(l => l.Value)
-            .SingleOrDefault();
-
     /// <summary>
     /// Retrieves low-level information about a container.
     /// </summary>

@@ -22,7 +22,7 @@ public sealed class CreateBackup
         [FromBody, BindRequired] CreateBackupRequest request,
         IBackgroundJobClient backgroundJob)
     {
-        var parameters = new BackupJobParameters(request.ContainerName, request.Directories?.ToList());
+        var parameters = new BackupContainerJob.Parameters(request.ContainerName, request.Directories?.ToList());
         backgroundJob.Enqueue<BackupContainerJob>(x => x.DoBackup(parameters, CancellationToken.None));
         return TypedResults.Ok();
     }

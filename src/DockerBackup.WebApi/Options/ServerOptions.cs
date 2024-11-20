@@ -25,7 +25,7 @@ public sealed class ServerOptions
     public string ConfigDirectoryPath { get; set; } = "/config";
 
     /// <summary>
-    /// Whether to map the hangifre dashboard in the request pipeline
+    /// Whether to map the hangifre dashboard in the request pipeline.
     /// </summary>
     public bool HangfireDashboard { get; set; } = true;
 

@@ -21,6 +21,7 @@ services:
       - backup.dir.0=/storage1
       - backup.dir.1=/storage2
       - backup.dir.2=/storage3
+      - backup.maximum-backups=5
     volumes:
       - ./service3-1:/storage1
       - ./service3-2:/storage2
