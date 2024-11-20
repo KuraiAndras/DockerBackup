@@ -24,6 +24,8 @@ public sealed class BackupContainerJob
 {
     public record Parameters(string ContainerName, List<string>? Directories = null);
 
+    public static string GetJobName(string containerName) => containerName.Replace("/", string.Empty);
+
     public async Task DoBackup(Parameters parameters, CancellationToken cancellationToken = default)
     {
         var backupFilePaths = new List<FileInfo>();

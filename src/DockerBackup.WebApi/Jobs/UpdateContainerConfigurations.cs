@@ -23,7 +23,7 @@ public sealed class UpdateContainerConfigurations(IOptions<BackupOptions> option
             var parameters = new BackupContainerJob.Parameters(containerName);
             recurringJob.AddOrUpdate<BackupContainerJob>
             (
-                containerName.Replace("/", string.Empty),
+                BackupContainerJob.GetJobName(containerName),
                 x => x.DoBackup(parameters, CancellationToken.None),
                 container.Cron
             );
