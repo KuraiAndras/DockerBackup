@@ -2,7 +2,6 @@ using System.Security.Claims;
 
 using DockerBackup.ApiClient;
 using DockerBackup.WebApi.Database;
-using DockerBackup.WebApi.Results;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -34,7 +33,7 @@ public sealed class Info
             {
                 UserName = userName,
             })
-            : new InternalServerError<ProblemDetails>(new()
+            : TypedResults.InternalServerError<ProblemDetails>(new()
             {
                 Title = "Users must have a name.",
             });

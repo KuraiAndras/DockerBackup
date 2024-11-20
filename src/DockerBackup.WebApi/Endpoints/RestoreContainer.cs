@@ -1,7 +1,6 @@
 using Docker.DotNet;
 
 using DockerBackup.WebApi.Database;
-using DockerBackup.WebApi.Results;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;

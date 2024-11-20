@@ -15,7 +15,7 @@ namespace DockerBackup.WebApi.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
             modelBuilder.Entity("DockerBackup.WebApi.Database.AppUser", b =>
                 {
@@ -96,7 +96,7 @@ namespace DockerBackup.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContainerBackups");
+                    b.ToTable("ContainerBackups", (string)null);
                 });
 
             modelBuilder.Entity("DockerBackup.WebApi.Database.FileBackup", b =>
@@ -123,7 +123,7 @@ namespace DockerBackup.WebApi.Migrations
 
                     b.HasIndex("ContainerBackupId");
 
-                    b.ToTable("FileBackups");
+                    b.ToTable("FileBackups", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
