@@ -16,4 +16,5 @@ jobs:
       - uses: actions/setup-dotnet@v4
 
       - name: "Run build"
-        run: ./build.sh --targets publish-docker-image --configuration Release --verbosity minimal
+        run: |
+          echo "echo "Running workflow for tag: ${{ github.ref }}""
