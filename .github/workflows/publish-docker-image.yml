@@ -13,8 +13,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-dotnet@v4
-
       - name: "Run build"
         run: |
-          echo "echo "Running workflow for tag: ${{ github.ref }}""
+          echo "echo "Running workflow for tag: ${{ github.ref_name }}""
