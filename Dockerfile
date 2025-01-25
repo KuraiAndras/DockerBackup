@@ -4,12 +4,12 @@ WORKDIR /build
 
 COPY . .
 
-RUN dotnet publish ./src/DockerBackup.WebApi -o artifacts/DockerBackup.WebApi -r linux-x64 --self-contained true
+RUN dotnet publish ./src/DockerBackup.WebApi -o artifacts/DockerBackup.WebApi
 
-FROM alpine:3.21.2 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0.1-alpine3.21 AS runtime
 
 WORKDIR /docker-backup
 
 COPY --from=build /build/artifacts/DockerBackup.WebApi .
 
-ENTRYPOINT [ "DockerBackup.WebApi" ]
+ENTRYPOINT [ "dotnet", "DockerBackup.WebApi.dll" ]
