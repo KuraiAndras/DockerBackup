@@ -15,6 +15,6 @@ public sealed class UserSetUp
     {
         var areThereAnyUsers = await identityService.CanUsersRegister(cancellationToken);
 
-        return TypedResults.Ok<UserSetUpResponse>(new(areThereAnyUsers));
+        return TypedResults.Ok<UserSetUpResponse>(new(!areThereAnyUsers));
     }
 }
