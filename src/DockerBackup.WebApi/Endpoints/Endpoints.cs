@@ -26,7 +26,9 @@ public static class Endpoints
             .MapPost("create-backup", CreateBackup.Handle)
             .WithOpenApi("containers", "create-backup");
 
-        var backups = api.MapGroup("backups");
+        var backups = api
+            .MapGroup("backups")
+            .RequireAuthorization();
 
         backups
             .MapGet(ListBackups.Handle)
