@@ -1,3 +1,4 @@
+using DockerBackup.ApiClient;
 using DockerBackup.WebClient.Auth;
 
 using Microsoft.AspNetCore.Components;
@@ -7,10 +8,6 @@ using MudBlazor;
 namespace DockerBackup.WebClient.Layout;
 public partial class MainLayout
 {
-    private bool _drawerOpen = true;
-    private bool _isDarkMode = true;
-    private MudTheme? _theme = null;
-
     private readonly PaletteLight _lightPalette = new()
     {
         Black = "#110e2d",
@@ -51,27 +48,33 @@ public partial class MainLayout
     };
 
     [Inject] public required CookieAuthenticationStateProvider Auth { get; init; }
+    [Inject] public required IClient Client { get; init; }
 
-    private string DarkLightModeButtonIcon => _isDarkMode switch
+    public bool DrawerOpen { get; private set; } = true;
+    public bool IsDarkMode { get; private set; } = true;
+    public MudTheme? Theme { get; private set; } = null;
+
+    public string? Version { get; private set; }
+
+    private string DarkLightModeButtonIcon => IsDarkMode switch
     {
         true => Icons.Material.Rounded.AutoMode,
         false => Icons.Material.Outlined.DarkMode,
     };
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        _theme = new()
+    protected override void OnInitialized() =>
+        Theme = new()
         {
             PaletteLight = _lightPalette,
             PaletteDark = _darkPalette,
             LayoutProperties = new LayoutProperties()
         };
-    }
 
-    private void DrawerToggle() => _drawerOpen = !_drawerOpen;
-    private void DarkModeToggle() => _isDarkMode = !_isDarkMode;
+    protected override async Task OnInitializedAsync() =>
+        Version = (await Client.GetVersionAsync()).Version;
+
+    private void DrawerToggle() => DrawerOpen = !DrawerOpen;
+    private void DarkModeToggle() => IsDarkMode = !IsDarkMode;
 
     private async Task OnLogout() => await Auth.Logout();
 }

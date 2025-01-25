@@ -10,7 +10,13 @@ public static class Endpoints
 
         api.MapIdentity();
 
-        var containers = api.MapGroup("containers");
+        api
+            .MapGet("version", GetVersion.Handle)
+            .WithOpenApi("api", "get-version");
+
+        var containers = api
+            .MapGroup("containers")
+            .RequireAuthorization();
 
         containers
             .MapGet(ListContainers.Handle)
