@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: dotnet-sdk
+    directory: /
+    schedule:
+      interval: weekly
+      day: saturday
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+      day: saturday
+    groups:
+      allNuGet:
+        patterns:
+          - "*"
