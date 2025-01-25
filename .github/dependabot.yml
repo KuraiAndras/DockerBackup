@@ -18,3 +18,21 @@ updates:
       allNuGet:
         patterns:
           - "*"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: saturday
+    groups:
+      allGHA:
+        patterns:
+          - "*"
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: saturday
+    groups:
+      allDocker:
+        patterns:
+          - "*"
