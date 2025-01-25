@@ -48,12 +48,13 @@ builder.Services.AddScoped<SetupContainerScan>();
 // Add Hangfire services.
 builder.Services.AddHangfire((sp, configuration) =>
 {
-    var backupOptions = sp.GetRequiredService<IOptions<ServerOptions>>().Value;
+    var serverOptions = sp.GetRequiredService<IOptions<ServerOptions>>().Value;
+
     configuration
         .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
         .UseSimpleAssemblyNameTypeSerializer()
         .UseRecommendedSerializerSettings()
-        .UseSQLiteStorage(backupOptions.HangfireDatabaseFilePath());
+        .UseSQLiteStorage(serverOptions.HangfireDatabaseFilePath());
 });
 
 // Add the processing server as IHostedService
