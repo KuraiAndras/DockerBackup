@@ -6,16 +6,16 @@ using Microsoft.Extensions.Options;
 
 namespace DockerBackup.WebApi.Jobs;
 
-public sealed class SetupContainerScan(IOptions<BackupOptions> options, IRecurringJobManager recurringJob)
+public sealed class SetupContainerScan(IOptions<BackupOptions> backupOptions, IRecurringJobManager recurringJob)
 {
     public void Setup()
     {
         recurringJob.AddOrUpdate<UpdateContainerConfigurations>(
             UpdateContainerConfigurations.JobName,
             x => x.Handle(CancellationToken.None),
-            options.Value.ContainerScanCron);
+            backupOptions.Value.ContainerScanCron);
 
-        if (options.Value.ScanContainersOnStartup)
+        if (backupOptions.Value.ScanContainersOnStartup)
         {
             recurringJob.Trigger(UpdateContainerConfigurations.JobName);
         }

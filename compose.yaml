@@ -1,0 +1,12 @@
+services:
+  docker-backup:
+    container_name: docker-backup
+    build:
+      context: .
+    restart: unless-stopped
+    volumes:
+      - ./temp/backups:/backups
+      - ./temp/config:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 5050:8080
