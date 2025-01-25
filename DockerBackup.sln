@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DockerBackup.WebApi", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DockerBackup.ApiClient", "src\DockerBackup.ApiClient\DockerBackup.ApiClient.csproj", "{02B6D9CE-24CF-4EC1-9049-15E478804082}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "build", "build\build.csproj", "{6FD45732-E7F5-4FD4-93EC-83CF149B3F94}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,10 +29,6 @@ Global
 		{02B6D9CE-24CF-4EC1-9049-15E478804082}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02B6D9CE-24CF-4EC1-9049-15E478804082}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02B6D9CE-24CF-4EC1-9049-15E478804082}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6FD45732-E7F5-4FD4-93EC-83CF149B3F94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6FD45732-E7F5-4FD4-93EC-83CF149B3F94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6FD45732-E7F5-4FD4-93EC-83CF149B3F94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6FD45732-E7F5-4FD4-93EC-83CF149B3F94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
