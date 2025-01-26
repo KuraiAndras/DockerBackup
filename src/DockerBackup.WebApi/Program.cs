@@ -46,20 +46,24 @@ builder.Services.AddIdentityCore<AppUser>()
 builder.Services.AddScoped<DbSetup>();
 builder.Services.AddScoped<SetupContainerScan>();
 
-// Add Hangfire services.
-builder.Services.AddHangfire((sp, configuration) =>
-{
-    var serverOptions = sp.GetRequiredService<IOptions<ServerOptions>>().Value;
+builder.Services
+    .AddHangfire((sp, configuration) =>
+    {
+        var serverOptions = sp.GetRequiredService<IOptions<ServerOptions>>().Value;
 
-    configuration
-        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-        .UseSimpleAssemblyNameTypeSerializer()
-        .UseRecommendedSerializerSettings()
-        .UseSQLiteStorage(serverOptions.HangfireDatabaseFilePath());
-});
+        configuration
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UseSQLiteStorage(serverOptions.HangfireDatabaseFilePath());
+    })
+    .AddHangfireServer();
 
-// Add the processing server as IHostedService
-builder.Services.AddHangfireServer();
+builder.Services
+    .AddHealthChecks()
+    .AddDbContextCheck<ApplicationDb>()
+    .AddHangfire(o => o.MinimumAvailableServers = 1)
+    .AddDocker();
 
 var app = builder.Build();
 
@@ -92,6 +96,8 @@ app.MapFallbackToFile("index.html");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.MapHealthChecks("/api/health");
 
 app.UseAuthentication();
 app.UseAuthorization();

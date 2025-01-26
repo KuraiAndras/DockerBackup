@@ -377,5 +377,8 @@ dotnet_diagnostic.IDE0130.severity = warning
 # IDE0005: Using directive is unnecessary.
 dotnet_diagnostic.IDE0005.severity = warning
 
+# IDE0305: Simplify collection initialization
+dotnet_diagnostic.IDE0305.severity = warning
+
 [**/Migrations/*.cs]
 generated_code = true
