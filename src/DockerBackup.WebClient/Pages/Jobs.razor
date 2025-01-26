@@ -1,0 +1,39 @@
+@page "/jobs"
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+
+@inject IWebAssemblyHostEnvironment HostEnvironment
+
+<div class="iframe-container">
+    <iframe title="Hangfire jobs" src="@HangfireAddress" class="iframe-item"></iframe>
+</div>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .iframe-container {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+        flex-direction: column;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .iframe-item {
+        flex-grow: 1;
+        border: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+@code
+{
+    private string HangfireAddress => HostEnvironment.BaseAddress + "hangfire";
+}
