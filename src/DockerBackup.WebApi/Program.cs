@@ -62,7 +62,8 @@ builder.Services
 builder.Services
     .AddHealthChecks()
     .AddDbContextCheck<ApplicationDb>()
-    .AddHangfire(o => o.MinimumAvailableServers = 1);
+    .AddHangfire(o => o.MinimumAvailableServers = 1)
+    .AddDocker();
 
 var app = builder.Build();
 
