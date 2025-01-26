@@ -4,6 +4,7 @@ using DockerBackup.WebApi.Database;
 using DockerBackup.WebApi.Endpoints;
 using DockerBackup.WebApi.Endpoints.Identity;
 using DockerBackup.WebApi.Extensions;
+using DockerBackup.WebApi.HangfireDashboard;
 using DockerBackup.WebApi.Jobs;
 using DockerBackup.WebApi.Options;
 
@@ -86,16 +87,20 @@ if (app.Environment.IsDevelopment())
     }
 }
 
-app.UseHangfireDashboard(options: new()
-{
-    IgnoreAntiforgeryToken = true,
-});
-
 app.UseBlazorFrameworkFiles();
 app.MapFallbackToFile("index.html");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseHangfireDashboard(options: new()
+{
+    IgnoreAntiforgeryToken = true,
+    Authorization = [new DefaultAuthorizationFilter()],
+});
 
 app.MapDockerBackup();
 
