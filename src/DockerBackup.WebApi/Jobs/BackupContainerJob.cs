@@ -85,12 +85,12 @@ public sealed class BackupContainerJob
             {
                 ContainerName = parameters.ContainerName,
                 CreatedAt = now,
-                Files = backedUpContainerPaths.Select((containerPathToBackUp, i) => FileBackup.Create
+                Files = [.. backedUpContainerPaths.Select((containerPathToBackUp, i) => FileBackup.Create
                 (
                     filePath: backupFilePaths[i].FullName,
                     containerPath: containerPathToBackUp,
                     sizeInBytes: backupFilePaths[i].Length
-                )).ToList(),
+                ))],
             };
             db.ContainerBackups.Add(containerBackup);
 
