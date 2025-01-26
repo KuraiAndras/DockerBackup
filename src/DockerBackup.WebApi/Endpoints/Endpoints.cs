@@ -42,6 +42,10 @@ public static class Endpoints
             .MapPost("{backupId}/restore", RestoreContainer.Handle)
             .WithOpenApi("backups", "restore-backup");
 
+        backups
+            .MapGet("overall-storage-size", GetOverallBackupStorageSize.Handle)
+            .WithOpenApi("backups", "get-backup-overall-storage-size");
+
         return app;
     }
 
