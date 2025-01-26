@@ -86,7 +86,10 @@ if (app.Environment.IsDevelopment())
     }
 }
 
-app.UseHangfireDashboard();
+app.UseHangfireDashboard(options: new()
+{
+    IgnoreAntiforgeryToken = true,
+});
 
 app.UseBlazorFrameworkFiles();
 app.MapFallbackToFile("index.html");
