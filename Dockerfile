@@ -16,4 +16,7 @@ WORKDIR /docker-backup
 
 COPY --from=build /build/artifacts/DockerBackup.WebApi .
 
+HEALTHCHECK --interval=60s --timeout=5s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/healthcheck || exit 1
+
 ENTRYPOINT [ "dotnet", "DockerBackup.WebApi.dll" ]
