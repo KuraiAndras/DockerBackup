@@ -11,10 +11,17 @@ public partial class Backups
     [Inject] public required IClient Client { get; init; }
     [Inject] public required NavigationManager Navigation { get; init; }
 
-    private List<ListContainerBackupResponse> _backups = [];
+    public List<ListContainerBackupResponse> ContainerBackups { get; private set; } = [];
 
-    protected override async Task RefreshInternal() =>
-        _backups = await Client.GetBackupsAsync();
+    public long? OverallSizeInBytes { get; private set; }
+
+    protected override async Task RefreshInternal()
+    {
+        async Task GetContainers() => ContainerBackups = await Client.GetBackupsAsync();
+        async Task GetSizeInBytes() => OverallSizeInBytes = (await Client.GetBackupOverallStorageSizeAsync()).SizeInBytes;
+
+        await Task.WhenAll([GetContainers(), GetSizeInBytes()]);
+    }
 
     private void BackupClicked(TableRowClickEventArgs<ListContainerBackupResponse> tableRowClickEventArgs) =>
         Navigation.NavigateTo(Backup.PageUri(tableRowClickEventArgs.Item!.ContainerName));

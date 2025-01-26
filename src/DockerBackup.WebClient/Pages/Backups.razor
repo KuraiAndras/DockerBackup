@@ -3,8 +3,9 @@
 @inherits LoadingComponent
 
 <MudIconButton Icon="@Icons.Material.Filled.Cached" title="refresh" OnClick="@Refresh" />
+<MudText Typo="Typo.h6">Storage used: @UnitHelper.HumanReadableSize(OverallSizeInBytes)</MudText>
 
-<MudTable T="ListContainerBackupResponse" Items="@_backups" Hover="true" SortLabel="Sort By" Loading="@Loading"
+<MudTable T="ListContainerBackupResponse" Items="@ContainerBackups" Hover="true" SortLabel="Sort By" Loading="@Loading"
     OnRowClick="BackupClicked">
     <HeaderContent>
         <MudTh>
