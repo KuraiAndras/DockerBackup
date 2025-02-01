@@ -9,6 +9,7 @@
 <MudTable T="ContainerBackupResponse" Items="@_backups" Loading="@Loading">
     <ColGroup>
         <col width="60px" />
+        <col width="60px" />
         <col width="200px" />
         <col width="100px" />
         <col />
@@ -18,6 +19,9 @@
             <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => RestoreBackup(context.Id))">
                 Restore
             </MudButton>
+        </MudTd>
+        <MudTd DataLabel="Delete">
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" OnClick="@(() => DeleteBackup(context.Id))"/>
         </MudTd>
         <MudTd DataLabel="Created At">@context.CreatedAt.ToLocalTime().ToString()</MudTd>
         <MudTd DataLabel="Size">@UnitHelper.HumanReadableSize(context.SizeInBytes)</MudTd>
