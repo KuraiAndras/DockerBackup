@@ -16,12 +16,12 @@
     </ColGroup>
     <RowTemplate>
         <MudTd DataLabel="Restore">
-            <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => RestoreBackup(context.Id))">
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => RestoreBackup(context))">
                 Restore
             </MudButton>
         </MudTd>
         <MudTd DataLabel="Delete">
-            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" OnClick="@(() => DeleteBackup(context.Id))"/>
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" OnClick="@(() => DeleteBackup(context))"/>
         </MudTd>
         <MudTd DataLabel="Created At">@context.CreatedAt.ToLocalTime().ToString()</MudTd>
         <MudTd DataLabel="Size">@UnitHelper.HumanReadableSize(context.SizeInBytes)</MudTd>

@@ -20,18 +20,16 @@ public partial class Backup
     protected override async Task RefreshInternal() =>
         _backups = await Client.GetBackupsForContainerAsync(ContainerName);
 
-    private async Task RestoreBackup(Guid backupId) =>
+    private async Task RestoreBackup(ContainerBackupResponse backup) =>
         await Snackbar.Run
         (
-            async () => await Client.RestoreBackupAsync(backupId),
+            async () => await Client.RestoreBackupAsync(backup.Id),
             "Restored backup",
             "Restoring backup failed"
         );
 
-    private async Task DeleteBackup(Guid backupId)
+    private async Task DeleteBackup(ContainerBackupResponse backup)
     {
-        var backup = _backups.Single(b => b.Id == backupId);
-
         var parameters = new DialogParameters<DeleteDialog>
         {
             { x => x.ContentText, $"Do you want to delete the backup of {ContainerName} from {backup.CreatedAt.ToLocalTime()}?"}
@@ -45,7 +43,7 @@ public partial class Backup
         {
             await Snackbar.Run
             (
-                async () => await Client.DeleteBackupAsync(backupId),
+                async () => await Client.DeleteBackupAsync(backup.Id),
                 "Deleted backup",
                 "Deleting backup failed"
             );
