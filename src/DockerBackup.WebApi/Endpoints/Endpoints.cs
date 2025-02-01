@@ -46,6 +46,10 @@ public static class Endpoints
             .MapGet("overall-storage-size", GetOverallBackupStorageSize.Handle)
             .WithOpenApi("backups", "get-backup-overall-storage-size");
 
+        backups
+            .MapDelete("{backupId}", DeleteBackup.Handle)
+            .WithOpenApi("backups", "delete-backup");
+
         return app;
     }
 
