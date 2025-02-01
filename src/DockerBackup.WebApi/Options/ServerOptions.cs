@@ -24,6 +24,11 @@ public sealed class ServerOptions
     /// </summary>
     public string ConfigDirectoryPath { get; set; } = "/config";
 
+    /// <summary>
+    /// Whether to log in JSON format.
+    /// </summary>
+    public bool LogInJson { get; set; }
+
     public string DatabaseFilePath() => Path.Combine(ConfigDirectoryPath, DatabaseFileName);
 
     public string HangfireDatabaseFilePath() => Path.Combine(ConfigDirectoryPath, HangfireDatabaseFileName);
