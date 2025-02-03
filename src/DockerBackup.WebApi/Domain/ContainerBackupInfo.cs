@@ -68,8 +68,10 @@ public sealed class ContainerBackupInfo
     public string GetBackupDirectory(ServerOptions options, DateTime now) =>
         Path.Combine(options.BackupPath, Name.TrimStart('/'), $"{now:yyyy-MM-ddTHH-mm-ss}");
 
-    public static string GetBackupFileName(string backupDirectory, string containerPathToBackUp) =>
-        Path.Combine(backupDirectory, $"{containerPathToBackUp.TrimStart('/').Replace("/", "__")}.tar");
+    public static string GetBackupFileName(string backupDirectory, string containerPathToBackUp, bool compressed) =>
+        Path.Combine(backupDirectory, $"{containerPathToBackUp.TrimStart('/').Replace("/", "__")}.tar{(compressed ? ".gz" : string.Empty)}");
+
+    public static bool IsFileCompressed(string fileName) => fileName.EndsWith(".gz");
 
     public static IEnumerable<string> GetBackupPaths(IDictionary<string, string> labels) =>
         labels

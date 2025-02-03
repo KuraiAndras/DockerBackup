@@ -1,6 +1,9 @@
+using System.IO.Compression;
+
 using Docker.DotNet;
 
 using DockerBackup.WebApi.Database;
+using DockerBackup.WebApi.Domain;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +28,7 @@ public sealed class RestoreContainer
         CancellationToken cancellationToken = default
     )
     {
+        // TODO: make this a job
         var backup = await db.ContainerBackups
             .Where(b => b.Id == backupId)
             .Select(b => new
@@ -55,7 +59,10 @@ public sealed class RestoreContainer
 
             foreach (var file in backup.Files)
             {
-                await using var fileStream = File.OpenRead(file.FilePath);
+                await using var fileStream = ContainerBackupInfo.IsFileCompressed(file.FilePath) 
+                    ? new GZipStream(File.OpenRead(file.FilePath), CompressionMode.Decompress)
+                    : File.OpenRead(file.FilePath) as Stream;
+
                 await docker.Containers.ExtractArchiveToContainerAsync(container.ID, new()
                 {
                     AllowOverwriteDirWithFile = true,

@@ -74,7 +74,7 @@ public sealed class BackupContainerJob
                     Path = containerPathToBackUp,
                 }, statOnly: false, cancellationToken);
 
-                var tarFileName = ContainerBackupInfo.GetBackupFileName(backupDirectory, containerPathToBackUp);
+                var tarFileName = ContainerBackupInfo.GetBackupFileName(backupDirectory, containerPathToBackUp, container.Compress);
                 backupFilePaths.Add(new(tarFileName));
 
                 await using var tarStream = container.Compress
