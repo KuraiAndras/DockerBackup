@@ -52,6 +52,10 @@
         <MudTd DataLabel="Backup">
             <MudIconButton title="backup" Icon="@Icons.Material.Filled.Save"
                 Disabled="@(context.BackupDirectories.Count == 0)" OnClick="() => Save(context)" />
+            <MudButton title="backups" Disabled="@(context.BackupDirectories.Count == 0)"
+                OnClick="() => GoToBackups(context)">
+                Backups
+            </MudButton>
         </MudTd>
     </RowTemplate>
 </MudTable>

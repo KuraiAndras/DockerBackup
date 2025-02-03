@@ -15,6 +15,7 @@ public partial class Containers
     private List<Container> _containers = [];
 
     [Inject] public required IClient Client { get; init; }
+    [Inject] public required NavigationManager Navigation { get; init; }
 
     private bool SaveAllDisabled => !_selectedBackups.SelectMany(x => x.Value).Any();
 
@@ -46,4 +47,6 @@ public partial class Containers
             WaitForContainerStopMs: null
         )), $"Backup job of {container.Name} started", $"Queueing backup of {container.Name} failed");
     }
+
+    private void GoToBackups(Container container) => Navigation.NavigateTo(Backup.PageUri(container.Name));
 }
