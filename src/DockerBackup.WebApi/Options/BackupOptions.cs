@@ -1,3 +1,5 @@
+using System.IO.Compression;
+
 namespace DockerBackup.WebApi.Options;
 
 public sealed class BackupOptions
@@ -25,7 +27,17 @@ public sealed class BackupOptions
     public int? MaximumBackups { get; set; }
 
     /// <summary>
-    /// Whether to run container scans on startup.
+    /// Run container scans on startup.
     /// </summary>
     public bool ScanContainersOnStartup { get; set; } = true;
+
+    /// <summary>
+    /// Compress the backup by default.
+    /// </summary>
+    public bool Compress { get; set; } = true;
+
+    /// <summary>
+    /// Compression mode by default. Only applied if compression is turned on.
+    /// </summary>
+    public CompressionLevel CompressionMode { get; set; } = CompressionLevel.SmallestSize;
 }

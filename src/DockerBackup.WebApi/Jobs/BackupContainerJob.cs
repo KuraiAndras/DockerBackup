@@ -1,3 +1,5 @@
+using System.IO.Compression;
+
 using Docker.DotNet;
 
 using DockerBackup.WebApi.Database;
@@ -75,8 +77,11 @@ public sealed class BackupContainerJob
                 var tarFileName = ContainerBackupInfo.GetBackupFileName(backupDirectory, containerPathToBackUp);
                 backupFilePaths.Add(new(tarFileName));
 
-                await using var folderTarBall = File.Create(tarFileName);
-                await archive.Stream.CopyToAsync(folderTarBall, cancellationToken);
+                await using var tarStream = container.Compress
+                    ? new GZipStream(File.Create(tarFileName), container.CompressionMode)
+                    : File.Create(tarFileName) as Stream;
+
+                await archive.Stream.CopyToAsync(tarStream, cancellationToken);
 
                 backedUpContainerPaths.Add(containerPathToBackUp);
             }
