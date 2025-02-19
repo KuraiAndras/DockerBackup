@@ -61,7 +61,7 @@ public sealed class RestoreContainer
             {
                 var tarFilePath = file.FilePath;
 
-                var deleteTarFilePath = false;
+                var deleteTarFile = false;
 
                 if (ContainerBackupInfo.IsFileCompressed(file.FilePath))
                 {
@@ -72,7 +72,7 @@ public sealed class RestoreContainer
 
                     await zipStream.CopyToAsync(tempTarStream, cancellationToken);
 
-                    deleteTarFilePath = true;
+                    deleteTarFile = true;
                 }
 
                 try
@@ -87,7 +87,7 @@ public sealed class RestoreContainer
                 }
                 finally
                 {
-                    if (deleteTarFilePath && File.Exists(tarFilePath))
+                    if (deleteTarFile && File.Exists(tarFilePath))
                     {
                         File.Delete(tarFilePath);
                     }
