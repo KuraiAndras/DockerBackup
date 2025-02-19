@@ -9,6 +9,10 @@ updates:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
+    groups:
+      allSdk:
+        patterns:
+          - "*"
   - package-ecosystem: nuget
     directory: /
     schedule:
@@ -33,6 +37,6 @@ updates:
       interval: weekly
       day: saturday
     groups:
-      allDocker:
+      allSdk:
         patterns:
           - "*"
