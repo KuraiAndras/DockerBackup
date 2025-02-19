@@ -1,6 +1,9 @@
+using System.IO.Compression;
+
 using Docker.DotNet;
 
 using DockerBackup.WebApi.Database;
+using DockerBackup.WebApi.Domain;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +28,7 @@ public sealed class RestoreContainer
         CancellationToken cancellationToken = default
     )
     {
+        // TODO: make this a job
         var backup = await db.ContainerBackups
             .Where(b => b.Id == backupId)
             .Select(b => new
@@ -55,12 +59,39 @@ public sealed class RestoreContainer
 
             foreach (var file in backup.Files)
             {
-                await using var fileStream = File.OpenRead(file.FilePath);
-                await docker.Containers.ExtractArchiveToContainerAsync(container.ID, new()
+                var tarFilePath = file.FilePath;
+
+                var deleteTarFile = false;
+
+                if (ContainerBackupInfo.IsFileCompressed(file.FilePath))
                 {
-                    AllowOverwriteDirWithFile = true,
-                    Path = "/",
-                }, fileStream, cancellationToken);
+                    tarFilePath = Path.Combine(Path.GetDirectoryName(file.FilePath)!, "temp.tar");
+
+                    await using var tempTarStream = File.Create(tarFilePath);
+                    await using var zipStream = new GZipStream(File.OpenRead(file.FilePath), CompressionMode.Decompress);
+
+                    await zipStream.CopyToAsync(tempTarStream, cancellationToken);
+
+                    deleteTarFile = true;
+                }
+
+                try
+                {
+                    await using var fileStream = File.OpenRead(file.FilePath);
+
+                    await docker.Containers.ExtractArchiveToContainerAsync(container.ID, new()
+                    {
+                        AllowOverwriteDirWithFile = true,
+                        Path = "/",
+                    }, fileStream, cancellationToken);
+                }
+                finally
+                {
+                    if (deleteTarFile && File.Exists(tarFilePath))
+                    {
+                        File.Delete(tarFilePath);
+                    }
+                }
             }
 
             return TypedResults.Ok();

@@ -1,3 +1,6 @@
+using System.Globalization;
+using System.IO.Compression;
+
 using Docker.DotNet.Models;
 
 using DockerBackup.WebApi.Options;
@@ -12,6 +15,8 @@ public sealed class ContainerBackupInfo
         public const string Cron = "backup.cron";
         public const string MaximumBackups = "backup.maximum-backups";
         public const string WaitBeforeKill = "backup.wait";
+        public const string Compress = "backup.compress";
+        public const string CompressionMode = "backup.compression-mode";
     }
 
     public string Id { get; }
@@ -27,6 +32,10 @@ public sealed class ContainerBackupInfo
     public int? MaximumBackups { get; }
 
     public bool IsRunning { get; }
+
+    public bool Compress { get; }
+
+    public CompressionLevel CompressionMode { get; }
 
     /// <summary>
     /// The time to wait before kill the container when stopping in seconds
@@ -47,18 +56,22 @@ public sealed class ContainerBackupInfo
     {
         Id = id;
         Name = names.First();
-        Directories = GetBackupPaths(labels).ToArray();
+        Directories = [.. GetBackupPaths(labels)];
         Cron = GetBackupCron(labels) ?? options.Cron;
         MaximumBackups = GetMaximumBackups(labels) ?? options.MaximumBackups;
         IsRunning = status == "running";
         WaitBeforeKill = GetWaitBeforeKill(labels) ?? options.WaitBeforeKill;
+        Compress = GetCompress(labels) ?? options.Compress;
+        CompressionMode = GetCompressionMode(labels) ?? options.CompressionMode;
     }
 
     public string GetBackupDirectory(ServerOptions options, DateTime now) =>
         Path.Combine(options.BackupPath, Name.TrimStart('/'), $"{now:yyyy-MM-ddTHH-mm-ss}");
 
-    public static string GetBackupFileName(string backupDirectory, string containerPathToBackUp) =>
-        Path.Combine(backupDirectory, $"{containerPathToBackUp.TrimStart('/').Replace("/", "__")}.tar");
+    public static string GetBackupFileName(string backupDirectory, string containerPathToBackUp, bool compressed) =>
+        Path.Combine(backupDirectory, $"{containerPathToBackUp.TrimStart('/').Replace("/", "__")}.tar{(compressed ? ".gz" : string.Empty)}");
+
+    public static bool IsFileCompressed(string fileName) => fileName.EndsWith(".gz");
 
     public static IEnumerable<string> GetBackupPaths(IDictionary<string, string> labels) =>
         labels
@@ -74,12 +87,25 @@ public sealed class ContainerBackupInfo
     public static int? GetMaximumBackups(IDictionary<string, string> labels) =>
         labels
             .Where(l => l.Key == Keys.MaximumBackups)
-            .Select(l => int.TryParse(l.Value, out var count) ? count : null as int?)
+            .Select(l => int.TryParse(l.Value, CultureInfo.InvariantCulture, out var count) ? count : null as int?)
             .SingleOrDefault();
 
     public static uint? GetWaitBeforeKill(IDictionary<string, string> labels) =>
         labels
             .Where(l => l.Key == Keys.WaitBeforeKill)
-            .Select(l => uint.TryParse(l.Value, out var count) ? count : null as uint?)
+            .Select(l => uint.TryParse(l.Value, CultureInfo.InvariantCulture, out var count) ? count : null as uint?)
+            .SingleOrDefault();
+
+    public static bool? GetCompress(IDictionary<string, string> labels) =>
+        labels
+            .Where(l => l.Key == Keys.Compress)
+            .Select(l => bool.TryParse(l.Value, out var compress) ? compress : null as bool?)
+            .SingleOrDefault();
+
+
+    public static CompressionLevel? GetCompressionMode(IDictionary<string, string> labels) =>
+        labels
+            .Where(l => l.Key == Keys.CompressionMode)
+            .Select(l => Enum.TryParse<CompressionLevel>(l.Value, out var compressionMode) ? compressionMode : null as CompressionLevel?)
             .SingleOrDefault();
 }
