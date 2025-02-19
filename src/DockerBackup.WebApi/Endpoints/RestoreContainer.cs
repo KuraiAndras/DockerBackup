@@ -59,15 +59,39 @@ public sealed class RestoreContainer
 
             foreach (var file in backup.Files)
             {
-                await using var fileStream = ContainerBackupInfo.IsFileCompressed(file.FilePath) 
-                    ? new GZipStream(File.OpenRead(file.FilePath), CompressionMode.Decompress)
-                    : File.OpenRead(file.FilePath) as Stream;
+                var tarFilePath = file.FilePath;
 
-                await docker.Containers.ExtractArchiveToContainerAsync(container.ID, new()
+                var deleteTarFilePath = false;
+
+                if (ContainerBackupInfo.IsFileCompressed(file.FilePath))
                 {
-                    AllowOverwriteDirWithFile = true,
-                    Path = "/",
-                }, fileStream, cancellationToken);
+                    tarFilePath = Path.Combine(Path.GetDirectoryName(file.FilePath)!, "temp.tar");
+
+                    await using var tempTarStream = File.Create(tarFilePath);
+                    await using var zipStream = new GZipStream(File.OpenRead(file.FilePath), CompressionMode.Decompress);
+
+                    await zipStream.CopyToAsync(tempTarStream, cancellationToken);
+
+                    deleteTarFilePath = true;
+                }
+
+                try
+                {
+                    await using var fileStream = File.OpenRead(file.FilePath);
+
+                    await docker.Containers.ExtractArchiveToContainerAsync(container.ID, new()
+                    {
+                        AllowOverwriteDirWithFile = true,
+                        Path = "/",
+                    }, fileStream, cancellationToken);
+                }
+                finally
+                {
+                    if (deleteTarFilePath && File.Exists(tarFilePath))
+                    {
+                        File.Delete(tarFilePath);
+                    }
+                }
             }
 
             return TypedResults.Ok();
