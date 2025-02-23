@@ -1,6 +1,7 @@
 using Docker.DotNet;
 
 using DockerBackup.WebApi.Database;
+using DockerBackup.WebApi.Domain;
 using DockerBackup.WebApi.Endpoints;
 using DockerBackup.WebApi.Endpoints.Identity;
 using DockerBackup.WebApi.Extensions;
@@ -61,6 +62,7 @@ try
 
     builder.Services.AddScoped<IDockerClient>(_ => new DockerClientConfiguration().CreateClient());
     builder.Services.AddScoped<IIdentityService, IdentityService>();
+    builder.Services.AddTransient<IContainerBackupService, ContainerBackupService>();
 
     builder.Services.Configure<ServerOptions>(builder.Configuration.GetSection(ServerOptions.Section));
     builder.Services.Configure<BackupOptions>(builder.Configuration.GetSection(BackupOptions.Section));
