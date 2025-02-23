@@ -3,6 +3,7 @@ using System;
 using DockerBackup.WebApi.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DockerBackup.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationDb))]
-    partial class ApplicationDbModelSnapshot : ModelSnapshot
+    [Migration("20250223181130_UpdateEf9-0-2")]
+    partial class UpdateEf902
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
