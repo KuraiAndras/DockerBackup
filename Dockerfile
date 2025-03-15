@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0.200-alpine3.21 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0.201-alpine3.21 AS build
 
 ARG Version=1.0.0
 
@@ -8,7 +8,7 @@ COPY . .
 
 RUN dotnet publish ./src/DockerBackup.WebApi -o artifacts/DockerBackup.WebApi /p:Version=$Version
 
-FROM mcr.microsoft.com/dotnet/aspnet:9.0.2-alpine3.21 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0.3-alpine3.21 AS runtime
 
 WORKDIR /docker-backup
 
