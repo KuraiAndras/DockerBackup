@@ -17,14 +17,14 @@
       "rollForward": false
     },
     "nswag.consolecore": {
-      "version": "14.2.0",
+      "version": "14.3.0",
       "commands": [
         "nswag"
       ],
       "rollForward": false
     },
     "dotnet-ef": {
-      "version": "9.0.3",
+      "version": "9.0.4",
       "commands": [
         "dotnet-ef"
       ],
