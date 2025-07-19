@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0.302-alpine3.21 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0.303-alpine3.21 AS build
 
 ARG Version=1.0.0
 
